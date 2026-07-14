@@ -19,6 +19,7 @@ export class AdminLayout {
   protected navItems = [
     { label: 'Dashboard', path: '/admin', icon: 'dashboard' },
     { label: 'Colleges', path: '/admin/colleges', icon: 'apartment' },
+    { label: 'Leads', path: '/admin/leads', icon: 'group' },
   ];
 
   protected onLogin(): void {

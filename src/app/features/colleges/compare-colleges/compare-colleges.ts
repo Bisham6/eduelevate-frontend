@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CollegeService } from '../../../shared/services/college.service';
+import { LeadCaptureService } from '../../../shared/services/lead-capture.service';
 import { CompareStore } from '../../../shared/stores/compare.store';
 import { College } from '../../../shared/models';
 import { Breadcrumb, SectionHeader } from '../../../shared/components';
@@ -19,6 +20,7 @@ interface CompareMetric {
 })
 export class CompareColleges implements OnInit {
   private readonly collegeService = inject(CollegeService);
+  private readonly leadCapture = inject(LeadCaptureService);
   private readonly compareStore = inject(CompareStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -97,6 +99,14 @@ export class CompareColleges implements OnInit {
 
   protected isInCompare(id: string): boolean {
     return this.colleges().some((c) => c._id === id);
+  }
+
+  protected onApplyNow(college: College): void {
+    this.leadCapture.open({
+      collegeId: college._id,
+      collegeName: college.name,
+      source: 'compare',
+    });
   }
 
   private buildMetrics(cols: College[]): CompareMetric[] {

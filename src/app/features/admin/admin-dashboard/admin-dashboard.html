@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-bold text-primary">Admin Dashboard</h1>
   <p class="mt-1 text-gray-500">Manage college content and media uploads</p>
 
-  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
     <div class="rounded-card bg-white p-5 shadow-card">
       <p class="text-sm text-gray-500">Total Colleges</p>
       <p class="text-3xl font-bold text-primary">{{ stats().total }}</p>
@@ -19,10 +19,15 @@
       <p class="text-sm text-gray-500">Featured</p>
       <p class="text-3xl font-bold text-secondary">{{ stats().featured }}</p>
     </div>
+    <div class="rounded-card bg-white p-5 shadow-card">
+      <p class="text-sm text-gray-500">New Leads</p>
+      <p class="text-3xl font-bold text-blue-600">{{ stats().newLeads }}</p>
+    </div>
   </div>
 
-  <div class="mt-8 flex gap-3">
+  <div class="mt-8 flex flex-wrap gap-3">
     <a routerLink="/admin/colleges/new" class="btn-primary">+ Add New College</a>
     <a routerLink="/admin/colleges" class="btn-outline">Manage Colleges</a>
+    <a routerLink="/admin/leads" class="btn-outline">Manage Leads</a>
   </div>
 </div>

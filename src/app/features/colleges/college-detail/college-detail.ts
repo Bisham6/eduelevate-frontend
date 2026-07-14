@@ -2,6 +2,7 @@ import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { Component, OnInit, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CollegeService } from '../../../shared/services/college.service';
+import { LeadCaptureService } from '../../../shared/services/lead-capture.service';
 import { CompareStore } from '../../../shared/stores/compare.store';
 import { College } from '../../../shared/models';
 import { SeoService } from '../../../core/services/seo.service';
@@ -26,6 +27,7 @@ export class CollegeDetail implements OnInit {
   readonly slug = input<string>('');
 
   private readonly collegeService = inject(CollegeService);
+  private readonly leadCapture = inject(LeadCaptureService);
   private readonly compareStore = inject(CompareStore);
   private readonly router = inject(Router);
   private readonly seo = inject(SeoService);
@@ -101,5 +103,15 @@ export class CollegeDetail implements OnInit {
     if (this.compareStore.add(c._id)) {
       this.router.navigate(['/compare']);
     }
+  }
+
+  protected onApplyNow(): void {
+    const c = this.college();
+    if (!c) return;
+    this.leadCapture.open({
+      collegeId: c._id,
+      collegeName: c.name,
+      source: 'apply_now',
+    });
   }
 }

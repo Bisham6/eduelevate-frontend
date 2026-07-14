@@ -15,3 +15,12 @@ html {
 .mat-mdc-form-field {
   width: 100%;
 }
+
+.lead-capture-dialog-panel {
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: var(--radius-card, 16px) !important;
+    padding: 0 !important;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  }
+}

@@ -11,6 +11,10 @@
     </div>
   } @else {
     <form class="mt-4 space-y-4" (ngSubmit)="onSubmit()">
+      @if (error()) {
+        <div class="rounded-btn bg-red-50 px-3 py-2 text-sm text-red-600">{{ error() }}</div>
+      }
+
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700" for="inquiry-name">Full Name</label>
         <input
@@ -33,7 +37,30 @@
           class="h-10 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </div>
-      <button type="submit" class="btn-outline w-full">Submit Inquiry</button>
+      <div>
+        <label class="mb-1 block text-sm font-medium text-gray-700" for="inquiry-phone">Mobile Number</label>
+        <input
+          id="inquiry-phone"
+          type="tel"
+          [(ngModel)]="phone"
+          name="phone"
+          required
+          maxlength="10"
+          placeholder="9876543210"
+          class="h-10 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          [class.border-red-400]="phoneError()"
+        />
+        @if (phoneError()) {
+          <p class="mt-1 text-xs text-red-500">{{ phoneError() }}</p>
+        }
+      </div>
+      <button type="submit" class="btn-outline w-full" [disabled]="loading()">
+        @if (loading()) {
+          Submitting...
+        } @else {
+          Submit Inquiry
+        }
+      </button>
     </form>
   }
 </div>
