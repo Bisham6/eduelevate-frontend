@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { adminAuthGuard } from './core/guards/admin-auth.guard';
+import { adminGuestGuard } from './core/guards/admin-guest.guard';
 
 const SEO = {
   home: {
@@ -113,7 +115,15 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'admin/login',
+    canActivate: [adminGuestGuard],
+    loadComponent: () =>
+      import('./features/auth/admin-login/admin-login').then((m) => m.AdminLogin),
+    title: 'Admin Sign In — EduElevate',
+  },
+  {
     path: 'admin',
+    canActivate: [adminAuthGuard],
     loadComponent: () => import('./layouts/admin-layout/admin-layout').then((m) => m.AdminLayout),
     children: [
       {

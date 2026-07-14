@@ -1,0 +1,83 @@
+<div class="admin-login-page">
+  <div class="admin-login-card">
+    <div class="admin-login-header">
+      <div class="admin-login-brand">
+        <span class="admin-login-logo">
+          <span class="material-symbols-rounded">school</span>
+        </span>
+        <span class="admin-login-brand-text">EduElevate</span>
+      </div>
+      <h1 class="admin-login-title">Welcome Back, Admin</h1>
+      <p class="admin-login-subtitle">Please enter your credentials to access the command center.</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="admin-login-error" role="alert">{{ errorMessage() }}</div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="admin-login-form">
+      <div class="admin-login-field">
+        <label for="admin-email" class="admin-login-label">Username or Email</label>
+        <div class="admin-login-input-wrap">
+          <span class="material-symbols-rounded admin-login-input-icon">person</span>
+          <input
+            id="admin-email"
+            type="text"
+            [ngModel]="identifier()"
+            (ngModelChange)="identifier.set($event)"
+            name="identifier"
+            placeholder="bisham65"
+            autocomplete="username"
+            class="admin-login-input"
+          />
+        </div>
+      </div>
+
+      <div class="admin-login-field">
+        <div class="admin-login-label-row">
+          <label for="admin-password" class="admin-login-label">Password</label>
+          <a href="#" class="admin-login-forgot" (click)="$event.preventDefault()">Forgot Password?</a>
+        </div>
+        <div class="admin-login-input-wrap">
+          <input
+            id="admin-password"
+            [type]="showPassword() ? 'text' : 'password'"
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
+            name="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            class="admin-login-input admin-login-input--password"
+          />
+        </div>
+      </div>
+
+      <label class="admin-login-remember">
+        <input
+          type="checkbox"
+          [ngModel]="rememberMe()"
+          (ngModelChange)="rememberMe.set($event)"
+          name="rememberMe"
+        />
+        <span>Remember Me</span>
+      </label>
+
+      <button type="submit" class="admin-login-submit" [disabled]="loading()">
+        @if (loading()) {
+          Signing in...
+        } @else {
+          Sign In to Dashboard
+          <span class="material-symbols-rounded">arrow_forward</span>
+        }
+      </button>
+    </form>
+
+    <div class="admin-login-footer">
+      <a routerLink="/" class="admin-login-footer-link">← Back to Website</a>
+      <div class="admin-login-footer-links">
+        <a href="#" class="admin-login-footer-link" (click)="$event.preventDefault()">Security &amp; Privacy</a>
+        <a href="#" class="admin-login-footer-link" (click)="$event.preventDefault()">Support</a>
+      </div>
+    </div>
+  </div>
+</div>

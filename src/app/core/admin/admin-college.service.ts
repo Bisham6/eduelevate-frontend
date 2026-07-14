@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { College } from '../../shared/models';
-import { AdminAuthStore } from '../admin/admin-auth.store';
 
 export interface CreateCollegePayload {
   name: string;
@@ -36,38 +35,33 @@ export interface CreateCollegePayload {
 @Injectable({ providedIn: 'root' })
 export class AdminCollegeService {
   private readonly http = inject(HttpClient);
-  private readonly auth = inject(AdminAuthStore);
   private readonly baseUrl = `${environment.apiUrl}/admin/colleges`;
 
-  private headers(): HttpHeaders {
-    return new HttpHeaders({ 'x-admin-key': this.auth.getKey() });
-  }
-
   getAll(): Observable<College[]> {
-    return this.http.get<College[]>(this.baseUrl, { headers: this.headers() });
+    return this.http.get<College[]>(this.baseUrl);
   }
 
   getById(id: string): Observable<College> {
-    return this.http.get<College>(`${this.baseUrl}/${id}`, { headers: this.headers() });
+    return this.http.get<College>(`${this.baseUrl}/${id}`);
   }
 
   create(payload: CreateCollegePayload): Observable<College> {
-    return this.http.post<College>(this.baseUrl, payload, { headers: this.headers() });
+    return this.http.post<College>(this.baseUrl, payload);
   }
 
   update(id: string, payload: Partial<CreateCollegePayload>): Observable<College> {
-    return this.http.patch<College>(`${this.baseUrl}/${id}`, payload, { headers: this.headers() });
+    return this.http.patch<College>(`${this.baseUrl}/${id}`, payload);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers: this.headers() });
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
   publish(id: string): Observable<College> {
-    return this.http.post<College>(`${this.baseUrl}/${id}/publish`, {}, { headers: this.headers() });
+    return this.http.post<College>(`${this.baseUrl}/${id}/publish`, {});
   }
 
   unpublish(id: string): Observable<College> {
-    return this.http.post<College>(`${this.baseUrl}/${id}/unpublish`, {}, { headers: this.headers() });
+    return this.http.post<College>(`${this.baseUrl}/${id}/unpublish`, {});
   }
 }
