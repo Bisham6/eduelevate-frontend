@@ -14,7 +14,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.auth.getToken();
-    if (token && req.url.includes('/admin/')) {
+    const isProtectedAdminApi =
+      req.url.includes('/admin/') && !req.url.includes('/auth/admin/login');
+    if (token && isProtectedAdminApi) {
       return next.handle(
         req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }),
       );

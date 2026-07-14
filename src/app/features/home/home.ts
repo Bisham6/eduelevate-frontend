@@ -43,6 +43,7 @@ export class Home implements OnInit {
 
   protected searchQuery = '';
   protected searchLocation = '';
+  protected readonly heroImageUrl = 'assets/images/hero-students-library.png';
 
   protected readonly popularTags = ['IIT Bombay', 'MBA Admissions', 'NEET 2026', 'JEE Main'];
 
@@ -53,24 +54,24 @@ export class Home implements OnInit {
   ];
 
   protected readonly globalHubs = [
-    { country: 'USA', universities: 4500, image: 'https://images.unsplash.com/photo-1485738422979-f2995cc9fd98?w=600&h=900&fit=crop' },
-    { country: 'UK', universities: 160, image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&h=900&fit=crop' },
-    { country: 'Canada', universities: 220, image: 'https://images.unsplash.com/photo-1517935708355-2067221dddeb?w=600&h=900&fit=crop' },
-    { country: 'Australia', universities: 180, image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=600&h=900&fit=crop' },
+    { country: 'USA', universities: 4500, image: 'assets/images/study-abroad/usa.jpg' },
+    { country: 'UK', universities: 160, image: 'assets/images/study-abroad/uk.jpg' },
+    { country: 'Canada', universities: 220, image: 'assets/images/study-abroad/canada.jpg' },
+    { country: 'Australia', universities: 180, image: 'assets/images/study-abroad/australia.jpg' },
   ];
 
   protected readonly testimonials = [
     {
       name: 'Priya Sharma',
       role: 'B.Tech, IIT Delhi',
-      photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-      text: 'EduElevate helped me compare colleges and find the perfect fit. The detailed fee and placement data made my decision easy.',
+      photo: 'assets/images/testimonials/priya.jpg',
+      text: 'CollegeChuniye helped me compare colleges and find the perfect fit. The detailed fee and placement data made my decision easy.',
       rating: 5,
     },
     {
       name: 'Arjun Mehta',
       role: 'MBA, IIM Ahmedabad',
-      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      photo: 'assets/images/testimonials/arjun.jpg',
       text: 'The exam tracker kept me on schedule for CAT preparation. Highly recommend for anyone planning higher education.',
       rating: 5,
     },
@@ -78,11 +79,11 @@ export class Home implements OnInit {
 
   protected readonly faqItems: FaqItem[] = [
     {
-      question: 'How does EduElevate help in college selection?',
-      answer: 'EduElevate provides comprehensive data on colleges including NIRF rankings, fees, placements, and reviews to help you make informed decisions.',
+      question: 'How does CollegeChuniye help in college selection?',
+      answer: 'CollegeChuniye provides comprehensive data on colleges including NIRF rankings, fees, placements, and reviews to help you make informed decisions.',
     },
     {
-      question: 'Is the information on EduElevate verified?',
+      question: 'Is the information on CollegeChuniye verified?',
       answer: 'Yes, our content is AI-verified and regularly updated from official college websites and government sources.',
     },
     {

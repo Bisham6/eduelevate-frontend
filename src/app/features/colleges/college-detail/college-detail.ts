@@ -62,7 +62,7 @@ export class CollegeDetail implements OnInit {
         this.loading.set(false);
         this.seo.update({
           title: data.name,
-          description: data.about?.slice(0, 160) || `${data.name} — fees, placements, NIRF rank, and admission details on EduElevate.`,
+          description: data.about?.slice(0, 160) || `${data.name} — fees, placements, NIRF rank, and admission details on CollegeChuniye.`,
           keywords: `${data.name}, ${data.category}, ${data.location.city}, college admission`,
         });
         this.loadSimilar(slug);
@@ -86,7 +86,7 @@ export class CollegeDetail implements OnInit {
 
   protected heroImage(): string {
     const c = this.college();
-    return c?.media.hero || c?.media.thumbnail || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=600&fit=crop';
+    return c?.media.hero || c?.media.thumbnail || 'assets/images/defaults/college-hero.jpg';
   }
 
   protected formatFees(min: number, max: number): string {

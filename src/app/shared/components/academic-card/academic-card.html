@@ -6,6 +6,7 @@
       [alt]="college().name + ' campus'"
       class="h-full w-full object-cover"
       loading="lazy"
+      (error)="onThumbnailError($event)"
     />
     @if (college().media.logo) {
       <img

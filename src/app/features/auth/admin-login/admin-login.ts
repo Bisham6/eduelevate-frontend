@@ -41,8 +41,12 @@ export class AdminLogin {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/admin';
         this.router.navigateByUrl(returnUrl);
       },
-      error: () => {
-        this.errorMessage.set('Invalid username or password.');
+      error: (err: { status?: number; friendlyMessage?: string }) => {
+        if (err.status === 0) {
+          this.errorMessage.set('Unable to reach the server. Is the backend running?');
+        } else {
+          this.errorMessage.set('Invalid username or password.');
+        }
         this.loading.set(false);
       },
       complete: () => this.loading.set(false),

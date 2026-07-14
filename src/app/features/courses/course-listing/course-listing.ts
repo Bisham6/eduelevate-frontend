@@ -50,7 +50,7 @@ export class CourseListing implements OnInit {
     effect(() => {
       this.seo.update({
         title: 'Explore Trending Courses',
-        description: 'Browse UG, PG, and professional courses across Engineering, Medical, MBA, Law, and Design on EduElevate.',
+        description: 'Browse UG, PG, and professional courses across Engineering, Medical, MBA, Law, and Design on CollegeChuniye.',
         keywords: 'courses, B.Tech, MBBS, MBA, LLB, career paths, salary',
       });
     });

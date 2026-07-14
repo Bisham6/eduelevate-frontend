@@ -50,9 +50,10 @@
 
       <div class="relative hidden lg:block">
         <img
-          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop"
-          alt="Students on campus"
-          class="rounded-card shadow-card"
+          [src]="heroImageUrl"
+          alt="Students collaborating outside Central Library"
+          loading="eager"
+          class="aspect-[4/3] w-full rounded-card object-cover shadow-card"
         />
         <div class="absolute -bottom-4 -left-4 rounded-card bg-white p-4 shadow-card">
           <div class="flex items-center gap-2">
