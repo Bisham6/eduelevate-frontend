@@ -1,0 +1,79 @@
+<article class="hover-lift overflow-hidden rounded-card bg-white shadow-card">
+  <!-- Image header -->
+  <div class="relative aspect-[16/10] overflow-hidden">
+    <img
+      [src]="thumbnail()"
+      [alt]="college().name + ' campus'"
+      class="h-full w-full object-cover"
+      loading="lazy"
+    />
+    @if (college().media.logo) {
+      <img
+        [src]="college().media.logo"
+        [alt]="college().shortName || college().name"
+        class="absolute left-3 top-3 h-10 w-10 rounded-lg border-2 border-white bg-white object-contain p-1 shadow-sm"
+      />
+    }
+    @if (college().nirfRank) {
+      <div class="absolute left-1/2 top-3 -translate-x-1/2">
+        <app-status-chip [label]="'NIRF #' + college().nirfRank" variant="nirf" />
+      </div>
+    }
+    <button
+      type="button"
+      class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-primary shadow-sm transition-colors hover:bg-white"
+      (click)="save.emit(college())"
+      aria-label="Save college"
+    >
+      <span class="material-symbols-rounded text-lg">bookmark_border</span>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="p-4">
+    @if (college().rating) {
+      <div class="mb-1 flex items-center gap-1 text-sm font-medium text-green-600">
+        {{ college().rating!.average }}
+        <span class="material-symbols-rounded text-base" style="font-variation-settings: 'FILL' 1">star</span>
+      </div>
+    }
+
+    <h3 class="text-lg font-bold text-primary">
+      <a [routerLink]="['/colleges', college().slug]" class="hover:underline">{{ college().name }}</a>
+    </h3>
+
+    <p class="mt-1 flex items-center gap-1 text-sm text-gray-500">
+      <span class="material-symbols-rounded text-base">location_on</span>
+      {{ college().location.city }}, {{ college().location.state }}
+    </p>
+
+    <div class="mt-4 grid grid-cols-2 gap-3">
+      <div class="rounded-btn bg-secondary/10 px-3 py-2">
+        <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-500">Avg Fees</p>
+        <p class="text-sm font-bold text-primary">
+          {{ formatFees(college().stats.avgFeesMin, college().stats.avgFeesMax) }}
+        </p>
+      </div>
+      <div class="rounded-btn bg-primary-container px-3 py-2">
+        <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-500">Avg Package</p>
+        <p class="text-sm font-bold text-primary">{{ formatPackage(college().stats.avgPackage) }}</p>
+      </div>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+      <a [routerLink]="['/colleges', college().slug]" class="btn-primary flex-1 text-center text-sm">
+        Apply Now
+      </a>
+      @if (showCompare()) {
+        <button
+          type="button"
+          class="btn-outline flex h-10 w-10 shrink-0 items-center justify-center p-0"
+          (click)="compare.emit(college())"
+          aria-label="Compare college"
+        >
+          <span class="material-symbols-rounded text-lg">compare_arrows</span>
+        </button>
+      }
+    </div>
+  </div>
+</article>

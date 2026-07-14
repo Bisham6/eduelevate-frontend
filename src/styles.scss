@@ -1,0 +1,38 @@
+@use '@angular/material' as mat;
+@use 'styles/tokens';
+@use 'styles/typography';
+@use 'styles/material-overrides';
+@use 'styles/animations';
+@use 'styles/utilities';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$cyan-palette,
+      ),
+      typography: (
+        plain-family: Lexend,
+        brand-family: Lexend,
+      ),
+      density: 0,
+    )
+  );
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color-scheme: light;
+  background-color: var(--color-surface);
+  color: #374151;
+}

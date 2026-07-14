@@ -1,0 +1,178 @@
+<div>
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-primary">{{ isEdit() ? 'Edit College' : 'Add New College' }}</h1>
+      <p class="text-sm text-gray-500">Fill in details and upload images for each slot</p>
+    </div>
+    <a routerLink="/admin/colleges" class="text-sm text-primary hover:underline">← Back to list</a>
+  </div>
+
+  @if (error()) {
+    <div class="mb-4 rounded-btn bg-red-50 p-3 text-sm text-red-600">{{ error() }}</div>
+  }
+  @if (success()) {
+    <div class="mb-4 rounded-btn bg-green-50 p-3 text-sm text-green-700">{{ success() }}</div>
+  }
+  @if (uploading()) {
+    <div class="mb-4 rounded-btn bg-primary-container p-3 text-sm text-primary">
+      Uploading {{ uploading() }} image...
+    </div>
+  }
+
+  <form class="grid gap-8 lg:grid-cols-3" (ngSubmit)="saveDraft()">
+    <!-- Main form -->
+    <div class="space-y-6 lg:col-span-2">
+      <section class="rounded-card bg-white p-6 shadow-card">
+        <h2 class="mb-4 font-bold text-primary">Basic Information</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label class="mb-1 block text-sm font-medium">College Name *</label>
+            <input [(ngModel)]="form.name" name="name" required class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Short Name</label>
+            <input [(ngModel)]="form.shortName" name="shortName" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Slug</label>
+            <input [(ngModel)]="form.slug" name="slug" placeholder="auto-generated if empty" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Type</label>
+            <input [(ngModel)]="form.type" name="type" placeholder="Public Technical University" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Established</label>
+            <input [(ngModel)]="form.established" name="established" type="number" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Category *</label>
+            <select [(ngModel)]="form.category" name="category" class="field-input">
+              <option>Engineering</option>
+              <option>Medical</option>
+              <option>MBA</option>
+              <option>Law</option>
+              <option>Design</option>
+              <option>Science</option>
+            </select>
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">NIRF Rank</label>
+            <input [(ngModel)]="form.nirfRank" name="nirfRank" type="number" class="field-input" />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-card bg-white p-6 shadow-card">
+        <h2 class="mb-4 font-bold text-primary">Location</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="mb-1 block text-sm font-medium">City *</label>
+            <input [(ngModel)]="form.location.city" name="city" required class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">State *</label>
+            <input [(ngModel)]="form.location.state" name="state" required class="field-input" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="mb-1 block text-sm font-medium">Address</label>
+            <input [(ngModel)]="form.location.address" name="address" class="field-input" />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-card bg-white p-6 shadow-card">
+        <h2 class="mb-4 font-bold text-primary">Stats & Fees</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="mb-1 block text-sm font-medium">Avg Fees Min (₹) *</label>
+            <input [(ngModel)]="form.stats.avgFeesMin" name="avgFeesMin" type="number" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Avg Fees Max (₹) *</label>
+            <input [(ngModel)]="form.stats.avgFeesMax" name="avgFeesMax" type="number" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Avg Package (₹) *</label>
+            <input [(ngModel)]="form.stats.avgPackage" name="avgPackage" type="number" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Highest Package (₹)</label>
+            <input [(ngModel)]="form.stats.highestPackage" name="highestPackage" type="number" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Campus Size</label>
+            <input [(ngModel)]="form.stats.campusSize" name="campusSize" placeholder="325 Acres" class="field-input" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium">Student Count</label>
+            <input [(ngModel)]="form.stats.studentCount" name="studentCount" type="number" class="field-input" />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-card bg-white p-6 shadow-card">
+        <h2 class="mb-4 font-bold text-primary">About</h2>
+        <textarea [(ngModel)]="form.about" name="about" rows="5" class="field-input" placeholder="College description..."></textarea>
+      </section>
+
+      <section class="rounded-card bg-white p-6 shadow-card">
+        <h2 class="mb-4 font-bold text-primary">Infrastructure Tags</h2>
+        <div class="flex gap-2">
+          <input [(ngModel)]="infraInput" name="infraInput" placeholder="e.g. SMART LABS" class="field-input flex-1" />
+          <button type="button" class="btn-outline shrink-0" (click)="addInfra()">Add</button>
+        </div>
+        <div class="mt-2 flex flex-wrap gap-2">
+          @for (tag of form.infrastructure; track tag) {
+            <span class="rounded-full bg-primary-container px-3 py-1 text-xs text-primary">{{ tag }}</span>
+          }
+        </div>
+      </section>
+    </div>
+
+    <!-- Media + actions sidebar -->
+    <div class="space-y-6">
+      <section class="rounded-card bg-white p-6 shadow-card">
+        <h2 class="mb-4 font-bold text-primary">Publish Settings</h2>
+        <label class="flex items-center gap-2 text-sm">
+          <input type="checkbox" [(ngModel)]="form.isFeatured" name="isFeatured" class="h-4 w-4 rounded text-primary" />
+          Featured on Home page
+        </label>
+        <label class="mt-2 flex items-center gap-2 text-sm">
+          <input type="checkbox" [(ngModel)]="form.isPublished" name="isPublished" class="h-4 w-4 rounded text-primary" />
+          Published (visible on site)
+        </label>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-bold text-primary">Images</h2>
+        <p class="text-xs text-gray-500">Upload images after filling the college name. Files are saved on save.</p>
+
+        <app-media-upload label="Logo (128×128)" imageType="logo" [currentUrl]="mediaUrls.logo" (fileSelected)="onFileSelected('logo', $event)" />
+        <app-media-upload label="Hero Banner (1920×600)" imageType="hero" [currentUrl]="mediaUrls.hero" (fileSelected)="onFileSelected('hero', $event)" />
+        <app-media-upload label="Listing Thumbnail (800×500)" imageType="thumbnail" [currentUrl]="mediaUrls.thumbnail" (fileSelected)="onFileSelected('thumbnail', $event)" />
+        <app-media-upload label="Gallery Image" imageType="gallery" hint="Adds to gallery on save" (fileSelected)="onFileSelected('gallery', $event)" />
+
+        @if (mediaUrls.gallery.length) {
+          <div class="grid grid-cols-3 gap-2">
+            @for (url of mediaUrls.gallery; track url) {
+              <div class="relative">
+                <img [src]="url" alt="Gallery" class="aspect-video rounded-btn object-cover" />
+                <button type="button" class="absolute right-1 top-1 rounded-full bg-red-500 p-0.5 text-white" (click)="removeGalleryUrl(url)">
+                  <span class="material-symbols-rounded text-sm">close</span>
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <div class="space-y-2">
+        <button type="button" class="btn-primary w-full" [disabled]="saving()" (click)="saveAndPublish()">
+          {{ saving() ? 'Saving...' : 'Save & Publish' }}
+        </button>
+        <button type="submit" class="btn-outline w-full" [disabled]="saving()">Save as Draft</button>
+      </div>
+    </div>
+  </form>
+</div>

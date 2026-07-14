@@ -1,0 +1,11 @@
+<a
+  [routerLink]="['/colleges']"
+  [queryParams]="{ category: category().slug }"
+  class="hover-lift flex flex-col items-center rounded-card bg-white p-6 text-center shadow-card"
+>
+  <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/15 text-secondary">
+    <span class="material-symbols-rounded text-3xl">{{ category().icon }}</span>
+  </div>
+  <h3 class="font-semibold text-primary">{{ category().name }}</h3>
+  <p class="mt-1 text-sm text-gray-500">{{ category().collegeCount | number }}+ Colleges</p>
+</a>

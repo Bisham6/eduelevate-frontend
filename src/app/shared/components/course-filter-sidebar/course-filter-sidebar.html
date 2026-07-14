@@ -1,0 +1,49 @@
+<aside class="sticky top-24 rounded-card bg-white p-5 shadow-card" aria-label="Course filters">
+  <div class="mb-5 flex items-center justify-between">
+    <h2 class="text-lg font-bold text-primary">{{ title() }}</h2>
+    <button type="button" class="text-sm text-secondary hover:underline" (click)="clearAll.emit()">
+      Clear All
+    </button>
+  </div>
+
+  <mat-accordion multi class="course-filter-accordion">
+    @for (section of sections(); track section.id) {
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="flex items-center gap-2 text-sm font-semibold text-primary">
+            <span class="material-symbols-rounded text-lg text-secondary">{{ sectionIcon(section.id) }}</span>
+            {{ section.title }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <ul class="space-y-2 pb-2" role="list">
+          @for (option of section.options; track option.value) {
+            <li>
+              <label class="flex cursor-pointer items-center gap-2.5 text-sm text-gray-600">
+                @if (section.type === 'checkbox') {
+                  <input
+                    type="checkbox"
+                    class="h-4 w-4 rounded border-outline-variant text-primary accent-primary focus:ring-primary/30"
+                    [checked]="isSelected(section.id, option.value)"
+                    (change)="onCheckboxChange(section.id, option.value, $event)"
+                  />
+                } @else {
+                  <input
+                    type="radio"
+                    [name]="section.id"
+                    class="h-4 w-4 border-outline-variant text-primary accent-primary focus:ring-primary/30"
+                    [checked]="isSelected(section.id, option.value)"
+                    (change)="onRadioChange(section.id, option.value)"
+                  />
+                }
+                <span class="flex-1">{{ option.label }}</span>
+              </label>
+            </li>
+          }
+        </ul>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+
+  <button type="button" class="btn-primary mt-5 w-full" (click)="apply.emit()">Apply Filters</button>
+</aside>

@@ -1,0 +1,13 @@
+<span
+  class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide"
+  [class]="{
+    'bg-primary text-white': variant() === 'nirf',
+    'bg-secondary/15 text-secondary-dark': variant() === 'demand',
+    'bg-green-100 text-green-700': variant() === 'placement',
+    'bg-slate-100 text-slate-600': variant() === 'professional',
+    'bg-amber-100 text-amber-700': variant() === 'rising_star',
+    'bg-primary-container text-primary': variant() === 'default'
+  }"
+>
+  {{ label() }}
+</span>

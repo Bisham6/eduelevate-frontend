@@ -1,0 +1,30 @@
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-container) 25%,
+    #f0f2fa 50%,
+    var(--color-primary-container) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-card {
+  animation: fade-in-up 0.3s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    background: var(--color-primary-container);
+  }
+}

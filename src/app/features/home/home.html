@@ -1,0 +1,212 @@
+<!-- Hero -->
+<section class="relative overflow-hidden bg-gradient-to-br from-primary-container/40 via-surface to-secondary/5">
+  <div class="container-app section-padding">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <div class="animate-fade-in-up">
+        <h1 class="text-4xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl">
+          Find Your Perfect <span class="text-secondary">Academic Future</span>
+        </h1>
+        <p class="mt-4 text-lg text-gray-600">
+          Discover 10,000+ colleges, track entrance exams, and plan your education journey.
+        </p>
+
+        <form
+          (ngSubmit)="onHeroSearch()"
+          class="mt-8 rounded-card bg-white p-4 shadow-card"
+        >
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="relative">
+              <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+              <input
+                type="search"
+                [(ngModel)]="searchQuery"
+                name="searchQuery"
+                placeholder="Search for colleges..."
+                aria-label="Search colleges"
+                class="h-11 w-full rounded-btn border border-outline-variant pl-10 pr-4 text-sm outline-none focus:border-primary"
+              />
+            </div>
+            <div class="relative">
+              <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">location_on</span>
+              <input
+                type="text"
+                [(ngModel)]="searchLocation"
+                name="searchLocation"
+                placeholder="Preferred Location"
+                aria-label="Preferred location"
+                class="h-11 w-full rounded-btn border border-outline-variant pl-10 pr-4 text-sm outline-none focus:border-primary"
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn-primary mt-3 w-full sm:w-auto sm:px-12">Search</button>
+        </form>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          @for (tag of popularTags; track tag) {
+            <span class="rounded-full bg-white px-3 py-1 text-xs font-medium text-primary shadow-sm">{{ tag }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="relative hidden lg:block">
+        <img
+          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop"
+          alt="Students on campus"
+          class="rounded-card shadow-card"
+        />
+        <div class="absolute -bottom-4 -left-4 rounded-card bg-white p-4 shadow-card">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-rounded text-secondary" style="font-variation-settings: 'FILL' 1">star</span>
+            <div>
+              <p class="text-lg font-bold text-primary">4.9/5</p>
+              <p class="text-xs text-gray-500">Student Satisfaction</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Top Categories -->
+<section class="section-padding animate-fade-in bg-white">
+  <div class="container-app">
+    <app-section-header title="Top Categories" subtitle="Explore colleges by field of study" actionLabel="View All" actionLink="/colleges" />
+    <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      @if (loadingCategories()) {
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <app-skeleton variant="category" [count]="1" />
+        }
+      } @else {
+        @for (cat of categories(); track cat._id) {
+          <app-category-card [category]="cat" />
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Featured Colleges -->
+<section class="section-padding bg-surface">
+  <div class="container-app">
+    <app-section-header title="Featured Colleges" subtitle="Top-ranked institutions handpicked for you" actionLabel="View All" actionLink="/colleges" />
+    <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      @if (loadingFeatured()) {
+        @for (i of [1,2,3]; track i) {
+          <app-skeleton variant="card" [count]="1" />
+        }
+      } @else {
+        @for (college of featuredColleges(); track college._id) {
+          <app-academic-card [college]="college" variant="featured" (compare)="onCompare($event)" />
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Upcoming Exams -->
+<section class="section-padding bg-white">
+  <div class="container-app">
+    <app-section-header title="Upcoming Entrance Exams" subtitle="Don't miss important registration deadlines" actionLabel="View All Exams" actionLink="/exams" />
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      @if (loadingExams()) {
+        @for (i of [1,2,3,4]; track i) {
+          <div class="rounded-card border border-outline-variant bg-white p-5 shadow-card">
+            <app-skeleton variant="text" [lines]="4" />
+          </div>
+        }
+      } @else {
+        @for (exam of upcomingExams(); track exam._id) {
+        <div class="hover-lift rounded-card border border-outline-variant bg-white p-5 shadow-card">
+          <p class="text-xs font-semibold uppercase tracking-wide text-secondary">{{ exam.category }}</p>
+          <h3 class="mt-1 font-bold text-primary">{{ exam.name }}</h3>
+          <p class="mt-2 flex items-center gap-1 text-sm text-gray-500">
+            <span class="material-symbols-rounded text-base">event</span>
+            {{ formatExamDate(exam.examDate) }}
+          </p>
+          <p class="mt-1 text-xs text-gray-400">Register by {{ formatExamDate(exam.registrationEnd) }}</p>
+          <a [routerLink]="['/exams']" class="btn-outline mt-4 block w-full text-center text-sm">Explore Exam</a>
+        </div>
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Scholarships -->
+<section class="section-padding bg-primary text-white">
+  <div class="container-app">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold">Academic Scholarships</h2>
+      <p class="mt-2 text-primary-container/80">Financial aid opportunities for deserving students</p>
+    </div>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      @for (sch of scholarships; track sch.name) {
+        <div class="rounded-card border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
+          <h3 class="text-lg font-semibold">{{ sch.name }}</h3>
+          <p class="mt-2 text-2xl font-bold text-secondary">{{ sch.amount }}</p>
+          @if (sch.verify) {
+            <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm text-secondary hover:underline">
+              Verify <span class="material-symbols-rounded text-base">arrow_forward</span>
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Global Education Hubs -->
+<section class="section-padding bg-surface">
+  <div class="container-app">
+    <app-section-header title="Global Education Hubs" subtitle="Study abroad at top universities worldwide" actionLabel="Explore Study Abroad" actionLink="/study-abroad" />
+    <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      @for (hub of globalHubs; track hub.country) {
+        <div class="group relative aspect-[2/3] overflow-hidden rounded-card shadow-card">
+          <img [src]="hub.image" [alt]="hub.country" class="h-full w-full object-cover transition-transform group-hover:scale-105" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+          <div class="absolute bottom-0 p-4 text-white">
+            <h3 class="text-xl font-bold">{{ hub.country }}</h3>
+            <p class="text-sm opacity-90">{{ hub.universities }}+ Universities</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section-padding bg-white">
+  <div class="container-app">
+    <app-section-header title="What Students Say" subtitle="Real experiences from our community" />
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      @for (t of testimonials; track t.name) {
+        <div class="rounded-card border border-outline-variant bg-white p-6 shadow-card">
+          <div class="flex items-center gap-4">
+            <img [src]="t.photo" [alt]="t.name" class="h-12 w-12 rounded-full object-cover" />
+            <div>
+              <p class="font-semibold text-primary">{{ t.name }}</p>
+              <p class="text-sm text-gray-500">{{ t.role }}</p>
+            </div>
+            <div class="ml-auto flex text-secondary">
+              @for (star of [1,2,3,4,5]; track star) {
+                <span class="material-symbols-rounded text-sm" style="font-variation-settings: 'FILL' 1">star</span>
+              }
+            </div>
+          </div>
+          <p class="mt-4 text-sm leading-relaxed text-gray-600">"{{ t.text }}"</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section-padding bg-surface">
+  <div class="container-app">
+    <app-section-header title="Frequently Asked Questions" />
+    <div class="mt-8 max-w-3xl">
+      <app-faq-accordion [items]="faqItems" />
+    </div>
+  </div>
+</section>

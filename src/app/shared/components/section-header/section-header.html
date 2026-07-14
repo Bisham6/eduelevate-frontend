@@ -1,0 +1,30 @@
+<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <div>
+    <div class="flex flex-wrap items-center gap-3">
+      <h1 class="text-2xl font-bold text-primary md:text-3xl">{{ title() }}</h1>
+      @if (badge()) {
+        <span class="rounded-full bg-primary-container px-3 py-1 text-xs font-medium text-primary">
+          {{ badge() }}
+        </span>
+      }
+    </div>
+    @if (subtitle()) {
+      <p class="mt-1 text-sm text-gray-500">{{ subtitle() }}</p>
+    }
+  </div>
+  @if (actionLabel()) {
+    @if (actionLink()) {
+      <a [routerLink]="actionLink()" class="text-sm font-medium text-primary hover:underline">
+        {{ actionLabel() }} →
+      </a>
+    } @else {
+      <button
+        type="button"
+        class="text-sm font-medium text-primary hover:underline"
+        (click)="actionClicked.emit()"
+      >
+        {{ actionLabel() }} →
+      </button>
+    }
+  }
+</div>

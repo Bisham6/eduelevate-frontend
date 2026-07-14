@@ -1,0 +1,36 @@
+<nav aria-label="Pagination" class="flex items-center justify-center gap-1">
+  <button
+    type="button"
+    class="flex h-9 w-9 items-center justify-center rounded-full text-primary transition-colors hover:bg-primary-container disabled:opacity-40"
+    [disabled]="page() <= 1"
+    (click)="goTo(page() - 1)"
+    aria-label="Previous page"
+  >
+    <span class="material-symbols-rounded text-lg">chevron_left</span>
+  </button>
+
+  @for (p of pages(); track p) {
+    <button
+      type="button"
+      class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-colors"
+      [class.bg-primary]="p === page()"
+      [class.text-white]="p === page()"
+      [class.text-primary]="p !== page()"
+      [class.hover:bg-primary-container]="p !== page()"
+      (click)="goTo(p)"
+      [attr.aria-current]="p === page() ? 'page' : null"
+    >
+      {{ p }}
+    </button>
+  }
+
+  <button
+    type="button"
+    class="flex h-9 w-9 items-center justify-center rounded-full text-primary transition-colors hover:bg-primary-container disabled:opacity-40"
+    [disabled]="page() >= totalPages()"
+    (click)="goTo(page() + 1)"
+    aria-label="Next page"
+  >
+    <span class="material-symbols-rounded text-lg">chevron_right</span>
+  </button>
+</nav>

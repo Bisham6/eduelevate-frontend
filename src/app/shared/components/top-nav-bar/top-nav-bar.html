@@ -1,0 +1,84 @@
+<header class="glass-nav sticky top-0 z-50 shadow-nav">
+  <nav class="container-app flex h-16 items-center justify-between gap-4" aria-label="Main navigation">
+    <a routerLink="/" class="flex shrink-0 items-center gap-2" (click)="closeMobileMenu()">
+      <span class="material-symbols-rounded text-3xl text-secondary">school</span>
+      <span class="text-xl font-bold text-primary">EduElevate</span>
+    </a>
+
+    <ul class="hidden items-center gap-8 md:flex" role="list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="nav-link-active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+            class="nav-link text-sm font-medium text-gray-600 transition-colors hover:text-primary"
+          >
+            {{ link.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="hidden items-center gap-3 lg:flex">
+      <form (submit)="onSearch($event)" class="relative">
+        <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400">search</span>
+        <input
+          type="search"
+          [(ngModel)]="searchQuery"
+          name="navSearch"
+          placeholder="{{ searchPlaceholder }}"
+          aria-label="{{ searchPlaceholder }}"
+          class="h-10 w-52 rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none transition-all focus:w-64 focus:border-primary focus:ring-2 focus:ring-primary/20 xl:w-64"
+        />
+      </form>
+      <a routerLink="/admin" class="px-3 text-sm font-medium text-gray-500 hover:text-primary" title="Admin panel">Admin</a>
+      <button type="button" class="btn-primary">Get Started</button>
+    </div>
+
+    <button
+      type="button"
+      class="inline-flex items-center justify-center rounded-btn p-2 text-primary md:hidden"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      aria-controls="mobile-menu"
+      aria-label="Toggle navigation menu"
+    >
+      <span class="material-symbols-rounded">{{ mobileMenuOpen() ? 'close' : 'menu' }}</span>
+    </button>
+  </nav>
+
+  @if (mobileMenuOpen()) {
+    <div id="mobile-menu" class="border-t border-outline-variant bg-white px-4 py-4 md:hidden">
+      <form (submit)="onSearch($event)" class="relative mb-4">
+        <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400">search</span>
+        <input
+          type="search"
+          [(ngModel)]="searchQuery"
+          name="navSearchMobile"
+          placeholder="{{ searchPlaceholder }}"
+          aria-label="{{ searchPlaceholder }}"
+          class="h-10 w-full rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      </form>
+      <ul class="space-y-1" role="list">
+        @for (link of navLinks; track link.path) {
+          <li>
+            <a
+              [routerLink]="link.path"
+              routerLinkActive="bg-primary-container text-primary"
+              (click)="closeMobileMenu()"
+              class="block rounded-btn px-3 py-2 text-sm font-medium text-gray-700"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+      <div class="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
+        <a routerLink="/admin" class="btn-outline w-full text-center" (click)="closeMobileMenu()">Admin</a>
+        <button type="button" class="btn-primary w-full">Get Started</button>
+      </div>
+    </div>
+  }
+</header>

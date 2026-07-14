@@ -1,0 +1,59 @@
+@if (!isAuthenticated()) {
+  <div class="flex min-h-screen items-center justify-center bg-surface p-4">
+    <div class="w-full max-w-md rounded-card bg-white p-8 shadow-card">
+      <div class="mb-6 text-center">
+        <span class="material-symbols-rounded text-4xl text-secondary">admin_panel_settings</span>
+        <h1 class="mt-2 text-2xl font-bold text-primary">EduElevate Admin</h1>
+        <p class="mt-1 text-sm text-gray-500">Enter your admin API key to continue</p>
+      </div>
+      <form (ngSubmit)="onLogin()" class="space-y-4">
+        <div>
+          <label class="mb-1 block text-sm font-medium text-gray-700" for="admin-key">Admin API Key</label>
+          <input
+            id="admin-key"
+            type="password"
+            [ngModel]="keyInput()"
+            (ngModelChange)="keyInput.set($event)"
+            name="adminKey"
+            placeholder="x-admin-key value"
+            class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          />
+        </div>
+        <button type="submit" class="btn-primary w-full">Access Admin Panel</button>
+      </form>
+      <p class="mt-4 text-center text-xs text-gray-400">
+        Default dev key is in <code>backend/.env</code> → ADMIN_API_KEY
+      </p>
+      <a routerLink="/" class="mt-4 block text-center text-sm text-primary hover:underline">← Back to site</a>
+    </div>
+  </div>
+} @else {
+  <div class="flex min-h-screen bg-surface">
+    <aside class="w-64 shrink-0 border-r border-outline-variant bg-white">
+      <div class="flex h-16 items-center gap-2 border-b border-outline-variant px-5">
+        <span class="material-symbols-rounded text-2xl text-secondary">admin_panel_settings</span>
+        <span class="font-bold text-primary">Admin</span>
+      </div>
+      <nav class="space-y-1 p-4">
+        @for (item of navItems; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="bg-primary-container text-primary"
+            [routerLinkActiveOptions]="{ exact: item.path === '/admin' }"
+            class="flex items-center gap-3 rounded-btn px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-primary-container/60"
+          >
+            <span class="material-symbols-rounded text-xl">{{ item.icon }}</span>
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+      <div class="absolute bottom-0 w-64 border-t border-outline-variant p-4">
+        <button type="button" class="btn-outline w-full text-sm" (click)="onLogout()">Logout</button>
+        <a routerLink="/" class="mt-2 block text-center text-xs text-gray-500 hover:text-primary">View public site</a>
+      </div>
+    </aside>
+    <main class="flex-1 overflow-auto p-8">
+      <router-outlet />
+    </main>
+  </div>
+}

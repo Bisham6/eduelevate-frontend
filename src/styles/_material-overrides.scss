@@ -1,0 +1,17 @@
+html {
+  --mat-sys-primary: var(--color-primary);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: var(--color-primary-container);
+  --mat-sys-tertiary: var(--color-secondary);
+  --mat-sys-tertiary-container: var(--color-secondary-container);
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
+  border-radius: var(--radius-btn) !important;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}

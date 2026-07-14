@@ -1,0 +1,83 @@
+<section class="animate-fade-in-up">
+  <div class="container-app section-padding">
+    <app-breadcrumb [items]="breadcrumbs()" />
+
+    <div class="mt-4">
+      <app-section-header
+        [title]="pageTitle()"
+        [badge]="total() + ' Results found'"
+      />
+    </div>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-4">
+      <!-- Filter sidebar -->
+      <div class="lg:col-span-1">
+        <app-filter-sidebar
+          [sections]="filterSections()"
+          [selectedValues]="selectedFilters()"
+          (valueChange)="onFilterChange($event)"
+          (clearAll)="onClearFilters()"
+          (apply)="onApplyFilters()"
+        />
+      </div>
+
+      <!-- Results -->
+      <div class="lg:col-span-3">
+        <!-- Sort bar -->
+        <div class="mb-6 flex items-center justify-end">
+          <label class="flex items-center gap-2 text-sm text-gray-600">
+            Sort by
+            <select
+              class="rounded-btn border border-outline-variant bg-white px-3 py-2 text-sm outline-none focus:border-primary"
+              [value]="filters().sort"
+              (change)="onSortChange($event)"
+            >
+              @for (opt of sortOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        @if (loading()) {
+          <div class="grid gap-6 sm:grid-cols-2">
+            @for (i of [1,2,3,4]; track i) {
+              <app-skeleton variant="card" [count]="1" />
+            }
+          </div>
+        } @else if (error()) {
+          <app-empty-state
+            icon="cloud_off"
+            title="Something went wrong"
+            [message]="error()!"
+          >
+            <button type="button" class="btn-primary mt-4" (click)="loadColleges()">Retry</button>
+          </app-empty-state>
+        } @else if (colleges().length === 0) {
+          <app-empty-state
+            icon="search_off"
+            title="No colleges found"
+            message="Try adjusting your filters or search terms."
+            actionLabel="Clear filters"
+            actionLink="/colleges"
+          />
+        } @else {
+          <div class="grid gap-6 sm:grid-cols-2">
+            @for (college of colleges(); track college._id) {
+              <app-academic-card [college]="college" (compare)="onCompare($event)" />
+            }
+          </div>
+
+          <div class="mt-10">
+            <app-pagination
+              [total]="total()"
+              [page]="filters().page ?? 1"
+              [pageSize]="filters().limit ?? 6"
+              (pageChange)="onPageChange($event)"
+            />
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

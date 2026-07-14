@@ -1,0 +1,54 @@
+<div class="flex min-h-screen bg-surface">
+  <!-- Sidebar -->
+  <aside
+    class="flex flex-col border-r border-outline-variant bg-white transition-all duration-300"
+    [class.w-64]="!sidebarCollapsed()"
+    [class.w-16]="sidebarCollapsed()"
+    aria-label="Dashboard navigation"
+  >
+    <div class="flex h-16 items-center justify-between border-b border-outline-variant px-4">
+      @if (!sidebarCollapsed()) {
+        <a routerLink="/" class="flex items-center gap-2">
+          <span class="material-symbols-rounded text-2xl text-secondary">school</span>
+          <span class="font-bold text-primary">EduElevate</span>
+        </a>
+      }
+      <button
+        type="button"
+        class="rounded-btn p-1.5 text-primary hover:bg-primary-container"
+        (click)="toggleSidebar()"
+        aria-label="Toggle sidebar"
+      >
+        <span class="material-symbols-rounded">{{ sidebarCollapsed() ? 'chevron_right' : 'chevron_left' }}</span>
+      </button>
+    </div>
+
+    <nav class="flex-1 space-y-1 p-3">
+      @for (item of navItems; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-primary-container text-primary"
+          [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
+          class="flex items-center gap-3 rounded-btn px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-primary-container/60 hover:text-primary"
+          [attr.title]="sidebarCollapsed() ? item.label : null"
+        >
+          <span class="material-symbols-rounded text-xl">{{ item.icon }}</span>
+          @if (!sidebarCollapsed()) {
+            <span>{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="flex flex-1 flex-col">
+    <header class="flex h-16 items-center justify-between border-b border-outline-variant bg-white px-6">
+      <h1 class="text-lg font-semibold text-primary">Student Dashboard</h1>
+      <a routerLink="/" class="text-sm text-gray-500 hover:text-primary">Back to site</a>
+    </header>
+    <main class="flex-1 overflow-auto p-6">
+      <router-outlet />
+    </main>
+  </div>
+</div>

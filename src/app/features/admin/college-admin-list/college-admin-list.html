@@ -1,0 +1,65 @@
+<div>
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-primary">Manage Colleges</h1>
+      <p class="text-sm text-gray-500">{{ colleges().length }} colleges in database</p>
+    </div>
+    <a routerLink="/admin/colleges/new" class="btn-primary">+ Add College</a>
+  </div>
+
+  @if (loading()) {
+    <p class="mt-8 text-gray-500">Loading...</p>
+  } @else if (error()) {
+    <p class="mt-8 text-red-600">{{ error() }}</p>
+  } @else {
+    <div class="mt-6 overflow-hidden rounded-card bg-white shadow-card">
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-outline-variant bg-surface/50">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-primary">College</th>
+            <th class="px-4 py-3 font-semibold text-primary">Category</th>
+            <th class="px-4 py-3 font-semibold text-primary">NIRF</th>
+            <th class="px-4 py-3 font-semibold text-primary">Status</th>
+            <th class="px-4 py-3 font-semibold text-primary">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-outline-variant">
+          @for (college of colleges(); track college._id) {
+            <tr class="hover:bg-surface/30">
+              <td class="px-4 py-3">
+                <p class="font-medium text-primary">{{ college.name }}</p>
+                <p class="text-xs text-gray-400">{{ college.slug }}</p>
+              </td>
+              <td class="px-4 py-3 text-gray-600">{{ college.category }}</td>
+              <td class="px-4 py-3">{{ college.nirfRank ? '#' + college.nirfRank : '—' }}</td>
+              <td class="px-4 py-3">
+                <span
+                  class="rounded-full px-2 py-0.5 text-xs font-medium"
+                  [class.bg-green-100]="college.isPublished"
+                  [class.text-green-700]="college.isPublished"
+                  [class.bg-orange-100]="!college.isPublished"
+                  [class.text-orange-700]="!college.isPublished"
+                >
+                  {{ college.isPublished ? 'Published' : 'Draft' }}
+                </span>
+                @if (college.isFeatured) {
+                  <span class="ml-1 rounded-full bg-secondary/15 px-2 py-0.5 text-xs text-secondary-dark">Featured</span>
+                }
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="text-sm text-primary hover:underline" (click)="editCollege(college._id)">Edit</button>
+                  <button type="button" class="text-sm text-secondary hover:underline" (click)="togglePublish(college)">
+                    {{ college.isPublished ? 'Unpublish' : 'Publish' }}
+                  </button>
+                  <a [routerLink]="['/colleges', college.slug]" target="_blank" class="text-sm text-gray-500 hover:underline">Preview</a>
+                  <button type="button" class="text-sm text-red-500 hover:underline" (click)="deleteCollege(college)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

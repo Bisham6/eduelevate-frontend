@@ -1,0 +1,64 @@
+<section class="animate-fade-in-up">
+  <div class="container-app section-padding">
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <div class="hidden w-72 shrink-0 lg:block">
+        <app-course-filter-sidebar
+          [sections]="filterSections"
+          [selectedValues]="selectedFilters()"
+          (valueChange)="onFilterChange($event)"
+          (clearAll)="onClearFilters()"
+          (apply)="onApplyFilters()"
+        />
+      </div>
+
+      <main class="min-w-0 flex-1">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-primary">Explore Trending Courses</h1>
+            <p class="mt-1 text-sm text-gray-500">Showing {{ total() }} Courses</p>
+          </div>
+          <app-sort-dropdown
+            [options]="sortOptions"
+            [value]="filters().sort ?? 'popularity'"
+            (sortChange)="onSortChange($event)"
+          />
+        </div>
+
+        @if (loading()) {
+          <div class="grid gap-6 md:grid-cols-2">
+            @for (i of [1,2,3,4]; track i) {
+              <app-skeleton variant="card" [count]="1" />
+            }
+          </div>
+        } @else if (error()) {
+          <app-empty-state icon="cloud_off" title="Something went wrong" [message]="error()!">
+            <button type="button" class="btn-primary mt-4" (click)="loadCourses()">Retry</button>
+          </app-empty-state>
+        } @else if (courses().length === 0) {
+          <app-empty-state
+            icon="search_off"
+            title="No courses found"
+            message="Try adjusting your filters or search terms."
+            actionLabel="Clear filters"
+            actionLink="/courses"
+          />
+        } @else {
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            @for (course of courses(); track course._id; let i = $index) {
+              <app-course-card [course]="course" [index]="i" (compare)="onCompare($event)" />
+            }
+          </div>
+
+          <div class="mt-12 flex justify-center">
+            <app-pagination
+              [total]="total()"
+              [page]="filters().page ?? 1"
+              [pageSize]="filters().limit ?? 6"
+              (pageChange)="onPageChange($event)"
+            />
+          </div>
+        }
+      </main>
+    </div>
+  </div>
+</section>

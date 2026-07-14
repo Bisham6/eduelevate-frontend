@@ -1,0 +1,206 @@
+@if (loading()) {
+  <div class="container-app section-padding">
+    <app-skeleton variant="hero" />
+    <div class="mt-8 grid gap-8 lg:grid-cols-3">
+      <div class="space-y-6 lg:col-span-2">
+        <div class="rounded-card bg-white p-6 shadow-card"><app-skeleton variant="text" [lines]="6" /></div>
+      </div>
+      <div class="space-y-6">
+        <div class="rounded-card bg-white p-6 shadow-card"><app-skeleton variant="text" [lines]="5" /></div>
+      </div>
+    </div>
+  </div>
+} @else if (error()) {
+  <div class="container-app section-padding text-center">
+    <p class="text-red-600">{{ error() }}</p>
+    <a routerLink="/colleges" class="btn-primary mt-4 inline-block">Back to Colleges</a>
+  </div>
+} @else if (college(); as c) {
+  <!-- Hero -->
+  <section class="relative h-80 bg-cover bg-center md:h-96" [style.background-image]="'url(' + heroImage() + ')'">
+    <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/20"></div>
+    <div class="container-app relative flex h-full flex-col justify-end pb-8">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="flex items-start gap-4">
+          @if (c.media.logo) {
+            <img [src]="c.media.logo" [alt]="c.shortName || c.name" class="h-16 w-16 rounded-card border-2 border-white bg-white object-contain p-2 md:h-20 md:w-20" />
+          }
+          <div class="text-white">
+            <div class="mb-2 flex flex-wrap items-center gap-3">
+              @if (c.nirfRank) {
+                <app-status-chip [label]="'NIRF 2024 #' + c.nirfRank" variant="demand" />
+              }
+              @if (c.rating) {
+                <span class="text-sm">{{ c.rating.average }} ({{ c.rating.count | number }} Reviews)</span>
+              }
+            </div>
+            <h1 class="text-2xl font-bold md:text-4xl">{{ c.name }}</h1>
+            <p class="mt-1 text-sm opacity-90">
+              {{ c.type }} | Estd. {{ c.established }} | {{ c.location.city }}, {{ c.location.country }}
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button type="button" class="inline-flex items-center gap-2 rounded-btn bg-white px-5 py-2.5 text-sm font-medium text-primary">
+            <span class="material-symbols-rounded text-lg">download</span>
+            Download Brochure
+          </button>
+          <button type="button" class="btn-primary !bg-secondary !text-primary-dark">Apply Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabs -->
+  <nav class="sticky top-16 z-40 border-b border-outline-variant bg-white shadow-sm" aria-label="College sections">
+    <div class="container-app flex gap-1 overflow-x-auto">
+      @for (tab of tabs; track tab.id) {
+        <button
+          type="button"
+          class="shrink-0 border-b-2 px-4 py-4 text-sm font-medium transition-colors"
+          [class.border-primary]="activeTab() === tab.id"
+          [class.text-primary]="activeTab() === tab.id"
+          [class.border-transparent]="activeTab() !== tab.id"
+          [class.text-gray-500]="activeTab() !== tab.id"
+          (click)="setTab(tab.id)"
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <section class="section-padding bg-surface">
+    <div class="container-app">
+      <app-breadcrumb
+        [items]="[
+          { label: 'Home', path: '/' },
+          { label: 'Colleges', path: '/colleges' },
+          { label: c.name },
+        ]"
+      />
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-3">
+        <!-- Main -->
+        <div class="space-y-8 lg:col-span-2">
+          @if (activeTab() === 'overview' || activeTab() === 'infrastructure') {
+            <div class="rounded-card bg-white p-6 shadow-card">
+              <h2 class="text-xl font-bold text-primary">About {{ c.shortName || c.name }}</h2>
+              <p class="mt-4 leading-relaxed text-gray-600">
+                {{ c.about || 'One of India\'s leading institutions offering world-class education, research facilities, and excellent placement opportunities for students.' }}
+              </p>
+
+              <div class="mt-6 grid gap-4 sm:grid-cols-3">
+                @if (c.stats.studentCount) {
+                  <app-stat-card icon="groups" label="Student Body" [value]="c.stats.studentCount + '+'" />
+                }
+                @if (c.stats.facultyCount) {
+                  <app-stat-card icon="school" label="Faculty" [value]="c.stats.facultyCount + '+'" />
+                }
+                @if (c.stats.campusSize) {
+                  <app-stat-card icon="landscape" label="Campus Size" [value]="c.stats.campusSize" />
+                }
+              </div>
+            </div>
+
+            @if (activeTab() === 'infrastructure' && c.media.gallery && c.media.gallery.length) {
+              <div class="rounded-card bg-white p-6 shadow-card">
+                <div class="mb-4 flex items-center justify-between">
+                  <h2 class="text-xl font-bold text-primary">Campus Infrastructure</h2>
+                  <span class="text-sm text-primary">View All →</span>
+                </div>
+                <div class="grid gap-4 md:grid-cols-2">
+                  <img [src]="c.media.gallery![0]" alt="Campus" class="aspect-video rounded-card object-cover md:row-span-2 md:aspect-auto md:h-full" />
+                  <div class="grid gap-4">
+                    @for (img of c.media.gallery!.slice(1, 4); track img) {
+                      <img [src]="img" alt="Campus facility" class="aspect-video rounded-card object-cover" loading="lazy" />
+                    }
+                  </div>
+                </div>
+                @if (c.infrastructure?.length) {
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    @for (item of c.infrastructure; track item) {
+                      <app-status-chip [label]="item" variant="default" />
+                    }
+                  </div>
+                }
+              </div>
+            }
+          } @else {
+            <div class="rounded-card bg-white p-12 text-center shadow-card">
+              <span class="material-symbols-rounded mb-4 text-5xl text-secondary">construction</span>
+              <h2 class="text-xl font-bold text-primary">{{ activeTab() | titlecase }} Section</h2>
+              <p class="mt-2 text-sm text-gray-500">Detailed {{ activeTab() }} information coming in a future update.</p>
+            </div>
+          }
+
+          <!-- Similar Colleges -->
+          @if (similarColleges().length) {
+            <div>
+              <h2 class="mb-6 text-xl font-bold text-primary">Similar Colleges</h2>
+              <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @for (sim of similarColleges(); track sim._id) {
+                  <app-academic-card [college]="sim" variant="compact" (compare)="onCompare($event)" />
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <div class="rounded-card bg-white p-6 shadow-card">
+            <h3 class="text-lg font-bold text-primary">Quick Statistics</h3>
+            <ul class="mt-4 space-y-4">
+              <li class="flex items-center gap-3 text-sm">
+                <span class="material-symbols-rounded text-secondary">payments</span>
+                <div>
+                  <p class="text-gray-500">Annual Fees</p>
+                  <p class="font-semibold text-primary">{{ formatFees(c.stats.avgFeesMin, c.stats.avgFeesMax) }}</p>
+                </div>
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <span class="material-symbols-rounded text-secondary">trending_up</span>
+                <div>
+                  <p class="text-gray-500">Avg. Package</p>
+                  <p class="font-semibold text-primary">{{ formatPackage(c.stats.avgPackage) }}</p>
+                </div>
+              </li>
+              @if (c.nirfRank) {
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="material-symbols-rounded text-secondary">emoji_events</span>
+                  <div>
+                    <p class="text-gray-500">NIRF Ranking</p>
+                    <p class="font-semibold text-primary">#{{ c.nirfRank }}</p>
+                  </div>
+                </li>
+              }
+              @if (c.stats.highestPackage) {
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="material-symbols-rounded text-secondary">rocket_launch</span>
+                  <div>
+                    <p class="text-gray-500">Highest Package</p>
+                    <p class="font-semibold text-primary">{{ formatPackage(c.stats.highestPackage) }}</p>
+                  </div>
+                </li>
+              }
+            </ul>
+            <button type="button" class="btn-primary mt-6 w-full">Start Application</button>
+          </div>
+
+          <div class="rounded-card bg-white p-6 shadow-card">
+            <div class="mb-3 flex items-center justify-between">
+              <h3 class="text-lg font-bold text-primary">Campus Location</h3>
+              <a href="#" class="text-xs font-semibold uppercase text-secondary">Get Directions</a>
+            </div>
+            <div class="aspect-video rounded-card bg-primary-container/50"></div>
+            <p class="mt-3 text-sm text-gray-600">{{ c.location.address || c.location.city + ', ' + c.location.state }}</p>
+          </div>
+
+          <app-inquiry-form [collegeName]="c.name" />
+        </div>
+      </div>
+    </div>
+  </section>
+}

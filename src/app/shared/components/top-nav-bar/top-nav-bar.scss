@@ -1,0 +1,15 @@
+.nav-link-active {
+  color: var(--color-primary);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 2px;
+    background-color: var(--color-primary);
+    border-radius: 1px;
+  }
+}

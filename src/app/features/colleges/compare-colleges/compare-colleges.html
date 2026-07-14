@@ -1,0 +1,145 @@
+<section class="section-padding animate-fade-in-up bg-surface">
+  <div class="container-app">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Decision Intelligence</p>
+    <app-section-header title="Compare Top Institutions" />
+
+    <app-breadcrumb
+      class="mt-4 block"
+      [items]="[
+        { label: 'Home', path: '/' },
+        { label: 'Colleges', path: '/colleges' },
+        { label: 'Compare' },
+      ]"
+    />
+
+    @if (loading()) {
+      <div class="mt-12 flex justify-center">
+        <span class="material-symbols-rounded animate-spin text-4xl text-primary">progress_activity</span>
+      </div>
+    } @else {
+      <!-- College selector cards -->
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        @for (college of colleges(); track college._id) {
+          <div class="rounded-card bg-white p-5 shadow-card">
+            <div class="flex items-start justify-between">
+              @if (college.media.logo) {
+                <img [src]="college.media.logo" [alt]="college.shortName" class="h-10 w-10 object-contain" />
+              } @else {
+                <span class="material-symbols-rounded text-3xl text-secondary">school</span>
+              }
+              <button
+                type="button"
+                class="text-gray-400 hover:text-red-500"
+                (click)="removeCollege(college._id)"
+                aria-label="Remove from comparison"
+              >
+                <span class="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <h3 class="mt-3 font-bold text-primary">{{ college.name }}</h3>
+            <p class="text-sm text-gray-500">{{ college.location.city }}, {{ college.location.state }}</p>
+            <a [routerLink]="['/colleges', college.slug]" class="btn-primary mt-4 block w-full text-center text-sm">
+              Apply Now
+            </a>
+          </div>
+        }
+
+        @if (colleges().length < 3) {
+          <div class="flex flex-col items-center justify-center rounded-card border-2 border-dashed border-outline-variant bg-white p-8">
+            <span class="material-symbols-rounded mb-2 text-4xl text-gray-300">add</span>
+            <p class="mb-4 text-sm font-medium text-gray-500">Add Institution</p>
+            <select
+              class="w-full rounded-btn border border-outline-variant px-3 py-2 text-sm"
+              (change)="addCollege($event)"
+              aria-label="Select college to add"
+            >
+              <option value="">Select a college...</option>
+              @for (c of allColleges(); track c._id) {
+                @if (!isInCompare(c._id)) {
+                  <option [value]="c._id">{{ c.name }}</option>
+                }
+              }
+            </select>
+          </div>
+        }
+      </div>
+
+      @if (colleges().length >= 2) {
+        <!-- Metrics table -->
+        <div class="mt-10 overflow-hidden rounded-card bg-white shadow-card">
+          @for (metric of metrics(); track metric.label) {
+            <div class="grid border-b border-outline-variant last:border-0" [style.grid-template-columns]="'200px repeat(' + colleges().length + ', 1fr)'">
+              <div class="flex items-center gap-2 bg-surface/50 p-4 text-sm font-medium text-primary">
+                <span class="material-symbols-rounded text-secondary">{{ metric.icon }}</span>
+                {{ metric.label }}
+              </div>
+              @for (val of metric.values; track $index) {
+                <div class="flex items-center p-4 text-sm text-gray-700">{{ val }}</div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Placements insight (CSS bar chart) -->
+        <div class="mt-10 grid gap-6 lg:grid-cols-2">
+          <div class="rounded-card bg-white p-6 shadow-card">
+            <h3 class="font-bold text-primary">Placements Insight</h3>
+            <p class="text-xs text-gray-500">In Lakhs (LPA)</p>
+            <div class="mt-6 space-y-4">
+              @for (c of colleges(); track c._id) {
+                <div>
+                  <div class="mb-1 flex justify-between text-sm">
+                    <span class="text-gray-600">{{ c.shortName || c.name }}</span>
+                    <span class="font-medium text-primary">{{ (c.stats.avgPackage / 100000).toFixed(1) }} LPA</span>
+                  </div>
+                  <div class="h-3 overflow-hidden rounded-full bg-primary-container">
+                    <div
+                      class="h-full rounded-full bg-primary transition-all"
+                      [style.width.%]="(c.stats.avgPackage / maxPackage()) * 100"
+                    ></div>
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="mt-4 flex gap-4 text-xs text-gray-500">
+              <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-primary"></span> Average</span>
+            </div>
+          </div>
+
+          <!-- Fee distribution -->
+          <div class="rounded-card bg-white p-6 shadow-card">
+            <h3 class="font-bold text-primary">Fee Distribution</h3>
+            <p class="text-xs text-gray-500">Annual Breakdown</p>
+            <div class="mt-6 space-y-4">
+              @for (c of colleges(); track c._id) {
+                <div>
+                  <p class="mb-1 text-sm font-medium text-gray-600">{{ c.shortName || c.name }}</p>
+                  <div class="h-3 overflow-hidden rounded-full bg-gray-100">
+                    <div
+                      class="h-full rounded-full bg-secondary transition-all"
+                      [style.width.%]="feePercent(c)"
+                    ></div>
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="mt-4 rounded-btn bg-primary-container/50 p-3 text-sm italic text-gray-600">
+              Compare total fees against average packages to evaluate ROI for each institution.
+            </div>
+          </div>
+        </div>
+      } @else if (colleges().length === 0) {
+        <div class="mt-10 rounded-card border border-dashed border-outline-variant bg-white p-12 text-center">
+          <span class="material-symbols-rounded mb-4 text-5xl text-secondary">compare_arrows</span>
+          <h2 class="text-xl font-bold text-primary">No colleges selected</h2>
+          <p class="mt-2 text-sm text-gray-500">Browse colleges and click Compare, or select from the dropdown above.</p>
+          <a routerLink="/colleges" class="btn-primary mt-6 inline-block">Browse Colleges</a>
+        </div>
+      } @else {
+        <div class="mt-10 rounded-card bg-white p-8 text-center text-gray-500">
+          Add at least one more college to see the comparison matrix.
+        </div>
+      }
+    }
+  </div>
+</section>

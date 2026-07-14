@@ -1,0 +1,51 @@
+@switch (variant()) {
+  @case ('card') {
+    @for (i of [].constructor(count()); track $index) {
+      <div class="skeleton-card overflow-hidden rounded-card bg-white shadow-card">
+        <div class="skeleton-shimmer aspect-[16/10]"></div>
+        <div class="space-y-3 p-4">
+          <div class="skeleton-shimmer h-4 w-3/4 rounded"></div>
+          <div class="skeleton-shimmer h-3 w-1/2 rounded"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="skeleton-shimmer h-12 rounded-btn"></div>
+            <div class="skeleton-shimmer h-12 rounded-btn"></div>
+          </div>
+          <div class="skeleton-shimmer h-10 rounded-btn"></div>
+        </div>
+      </div>
+    }
+  }
+  @case ('category') {
+    @for (i of [].constructor(count()); track $index) {
+      <div class="skeleton-card flex flex-col items-center rounded-card bg-white p-6 shadow-card">
+        <div class="skeleton-shimmer h-14 w-14 rounded-full"></div>
+        <div class="skeleton-shimmer mt-3 h-4 w-24 rounded"></div>
+        <div class="skeleton-shimmer mt-2 h-3 w-16 rounded"></div>
+      </div>
+    }
+  }
+  @case ('hero') {
+    <div class="skeleton-shimmer h-80 rounded-card md:h-96"></div>
+  }
+  @case ('row') {
+    @for (i of [].constructor(count()); track $index) {
+      <div class="flex items-center gap-4 rounded-card bg-white p-4 shadow-card">
+        <div class="skeleton-shimmer h-12 w-12 shrink-0 rounded-full"></div>
+        <div class="flex-1 space-y-2">
+          <div class="skeleton-shimmer h-4 w-2/3 rounded"></div>
+          <div class="skeleton-shimmer h-3 w-1/3 rounded"></div>
+        </div>
+      </div>
+    }
+  }
+  @case ('circle') {
+    <div class="skeleton-shimmer h-12 w-12 rounded-full"></div>
+  }
+  @default {
+    <div class="space-y-2">
+      @for (line of [].constructor(lines()); track $index) {
+        <div class="skeleton-shimmer h-3 rounded" [class.w-full]="$index < lines() - 1" [class.w-2/3]="$index === lines() - 1"></div>
+      }
+    </div>
+  }
+}

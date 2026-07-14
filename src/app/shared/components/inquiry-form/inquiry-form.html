@@ -1,0 +1,39 @@
+<div class="rounded-card bg-white p-6 shadow-card">
+  <h3 class="text-lg font-bold text-primary">Talk to our Counselor</h3>
+  @if (collegeName()) {
+    <p class="mt-1 text-sm text-gray-500">Regarding {{ collegeName() }}</p>
+  }
+
+  @if (submittedLocal()) {
+    <div class="mt-4 rounded-btn bg-green-50 p-4 text-sm text-green-700">
+      <span class="material-symbols-rounded mr-1 align-middle text-base">check_circle</span>
+      Thank you! Our counselor will contact you shortly.
+    </div>
+  } @else {
+    <form class="mt-4 space-y-4" (ngSubmit)="onSubmit()">
+      <div>
+        <label class="mb-1 block text-sm font-medium text-gray-700" for="inquiry-name">Full Name</label>
+        <input
+          id="inquiry-name"
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          required
+          class="h-10 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      </div>
+      <div>
+        <label class="mb-1 block text-sm font-medium text-gray-700" for="inquiry-email">Email Address</label>
+        <input
+          id="inquiry-email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          class="h-10 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      </div>
+      <button type="submit" class="btn-outline w-full">Submit Inquiry</button>
+    </form>
+  }
+</div>

@@ -1,0 +1,11 @@
+<div class="flex flex-col items-center rounded-card border border-outline-variant bg-white p-12 text-center">
+  <span class="material-symbols-rounded mb-4 text-5xl text-gray-300">{{ icon() }}</span>
+  <h3 class="text-lg font-semibold text-primary">{{ title() }}</h3>
+  @if (message()) {
+    <p class="mt-2 max-w-sm text-sm text-gray-500">{{ message() }}</p>
+  }
+  @if (actionLabel() && actionLink()) {
+    <a [routerLink]="actionLink()" class="btn-primary mt-6">{{ actionLabel() }}</a>
+  }
+  <ng-content />
+</div>
