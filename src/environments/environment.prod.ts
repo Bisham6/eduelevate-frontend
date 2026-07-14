@@ -1,5 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api/v1',
-  adminApiKey: '',
+  apiUrl: 'https://eduelevate-backend-fqn4.onrender.com/api/v1',
 };

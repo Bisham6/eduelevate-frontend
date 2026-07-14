@@ -1,30 +1,58 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { AdminUser } from '../auth/auth.models';
 
-const STORAGE_KEY = 'eduelevate_admin_key';
+const TOKEN_KEY = 'eduelevate_admin_token';
+const USER_KEY = 'eduelevate_admin_user';
 
 @Injectable({ providedIn: 'root' })
 export class AdminAuthStore {
-  private readonly _apiKey = signal<string>(this.loadKey());
+  private readonly _token = signal<string>(this.loadToken());
+  private readonly _user = signal<AdminUser | null>(this.loadUser());
 
-  readonly apiKey = this._apiKey.asReadonly();
-  readonly isAuthenticated = computed(() => !!this._apiKey());
+  readonly token = this._token.asReadonly();
+  readonly currentUser = this._user.asReadonly();
+  readonly isAuthenticated = computed(() => !!this._token());
 
-  setKey(key: string): void {
-    sessionStorage.setItem(STORAGE_KEY, key);
-    this._apiKey.set(key);
+  setSession(token: string, user: AdminUser, remember: boolean): void {
+    const storage = remember ? localStorage : sessionStorage;
+    storage.setItem(TOKEN_KEY, token);
+    storage.setItem(USER_KEY, JSON.stringify(user));
+    this.clearOtherStorage(remember);
+    this._token.set(token);
+    this._user.set(user);
   }
 
   clear(): void {
-    sessionStorage.removeItem(STORAGE_KEY);
-    this._apiKey.set('');
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    this._token.set('');
+    this._user.set(null);
   }
 
-  getKey(): string {
-    return this._apiKey() || environment.adminApiKey;
+  getToken(): string {
+    return this._token();
   }
 
-  private loadKey(): string {
-    return sessionStorage.getItem(STORAGE_KEY) || environment.adminApiKey || '';
+  private loadToken(): string {
+    return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || '';
+  }
+
+  private loadUser(): AdminUser | null {
+    const raw =
+      sessionStorage.getItem(USER_KEY) || localStorage.getItem(USER_KEY);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as AdminUser;
+    } catch {
+      return null;
+    }
+  }
+
+  private clearOtherStorage(remember: boolean): void {
+    const other = remember ? sessionStorage : localStorage;
+    other.removeItem(TOKEN_KEY);
+    other.removeItem(USER_KEY);
   }
 }

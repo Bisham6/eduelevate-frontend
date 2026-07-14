@@ -1,0 +1,18 @@
+.section-tabs {
+  top: var(--app-header-height);
+}
+
+.section-tabs__list {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scroll-snap-type: x proximity;
+
+  button {
+    scroll-snap-align: start;
+  }
+}

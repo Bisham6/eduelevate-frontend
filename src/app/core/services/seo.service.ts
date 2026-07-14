@@ -13,9 +13,9 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
 
-  private readonly siteName = 'EduElevate';
+  private readonly siteName = 'CollegeChuniye';
   private readonly defaultDescription =
-    'Discover colleges, track entrance exams, and plan your academic future with EduElevate.';
+    'Discover colleges, track entrance exams, and plan your academic future with CollegeChuniye.';
 
   update(config: Partial<SeoConfig>): void {
     const pageTitle = config.title

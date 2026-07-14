@@ -1,8 +1,8 @@
-<header class="glass-nav sticky top-0 z-50 shadow-nav">
+<header class="glass-nav shadow-nav">
   <nav class="container-app flex h-16 items-center justify-between gap-4" aria-label="Main navigation">
     <a routerLink="/" class="flex shrink-0 items-center gap-2" (click)="closeMobileMenu()">
       <span class="material-symbols-rounded text-3xl text-secondary">school</span>
-      <span class="text-xl font-bold text-primary">EduElevate</span>
+      <span class="text-xl font-bold text-primary">CollegeChuniye</span>
     </a>
 
     <ul class="hidden items-center gap-8 md:flex" role="list">
@@ -32,7 +32,7 @@
           class="h-10 w-52 rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none transition-all focus:w-64 focus:border-primary focus:ring-2 focus:ring-primary/20 xl:w-64"
         />
       </form>
-      <a routerLink="/admin" class="px-3 text-sm font-medium text-gray-500 hover:text-primary" title="Admin panel">Admin</a>
+      <a routerLink="/admin/login" class="px-3 text-sm font-medium text-gray-500 hover:text-primary" title="Admin panel">Admin</a>
       <button type="button" class="btn-primary">Get Started</button>
     </div>
 
@@ -76,7 +76,7 @@
         }
       </ul>
       <div class="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
-        <a routerLink="/admin" class="btn-outline w-full text-center" (click)="closeMobileMenu()">Admin</a>
+        <a routerLink="/admin/login" class="btn-outline w-full text-center" (click)="closeMobileMenu()">Admin</a>
         <button type="button" class="btn-primary w-full">Get Started</button>
       </div>
     </div>

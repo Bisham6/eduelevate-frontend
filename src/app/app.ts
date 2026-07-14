@@ -32,7 +32,7 @@ export class App implements OnInit {
       this.seo.update(seo);
     } else if (route?.snapshot.title) {
       this.seo.update({
-        title: String(route.snapshot.title).replace(' — EduElevate', '').replace(' | EduElevate', ''),
+        title: String(route.snapshot.title).replace(' — CollegeChuniye', '').replace(' | CollegeChuniye', ''),
       });
     }
   }

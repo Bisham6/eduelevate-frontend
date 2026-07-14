@@ -91,7 +91,7 @@ export class CollegeListing implements OnInit {
       const categoryLabel = category ? CATEGORY_LABELS[category] ?? category : 'all';
       this.seo.update({
         title,
-        description: `Browse and filter top ${categoryLabel} colleges by location, fees, NIRF ranking, and specialization on EduElevate.`,
+        description: `Browse and filter top ${categoryLabel} colleges by location, fees, NIRF ranking, and specialization on CollegeChuniye.`,
         keywords: category ? `${categoryLabel} colleges, ${categoryLabel} admission, NIRF ranking` : 'colleges, admission, NIRF ranking',
       });
     });

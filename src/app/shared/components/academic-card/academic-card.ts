@@ -36,13 +36,17 @@ export class AcademicCard {
     return `₹${amount.toLocaleString('en-IN')}`;
   }
 
+  protected readonly fallbackImage = 'assets/images/defaults/college-card.jpg';
+
   protected thumbnail(): string {
     const media = this.college().media;
-    return (
-      media.thumbnail ||
-      media.hero ||
-      'https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=500&fit=crop'
-    );
+    return media.thumbnail || media.hero || this.fallbackImage;
+  }
+
+  protected onThumbnailError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img.src.includes(this.fallbackImage)) return;
+    img.src = this.fallbackImage;
   }
 
   protected onApplyNow(): void {

@@ -51,9 +51,22 @@
     </div>
   </section>
 
+  <!-- Breadcrumb -->
+  <div class="border-b border-outline-variant bg-white">
+    <div class="container-app py-3">
+      <app-breadcrumb
+        [items]="[
+          { label: 'Home', path: '/' },
+          { label: 'Colleges', path: '/colleges' },
+          { label: c.name },
+        ]"
+      />
+    </div>
+  </div>
+
   <!-- Tabs -->
-  <nav class="sticky top-16 z-40 border-b border-outline-variant bg-white shadow-sm" aria-label="College sections">
-    <div class="container-app flex gap-1 overflow-x-auto">
+  <nav class="section-tabs sticky z-40 border-b border-outline-variant bg-white shadow-sm" aria-label="College sections">
+    <div class="container-app section-tabs__list flex gap-1 overflow-x-auto">
       @for (tab of tabs; track tab.id) {
         <button
           type="button"
@@ -71,17 +84,9 @@
   </nav>
 
   <!-- Content -->
-  <section class="section-padding bg-surface">
+  <section class="bg-surface pb-12 pt-8 md:pb-16 md:pt-10">
     <div class="container-app">
-      <app-breadcrumb
-        [items]="[
-          { label: 'Home', path: '/' },
-          { label: 'Colleges', path: '/colleges' },
-          { label: c.name },
-        ]"
-      />
-
-      <div class="mt-8 grid gap-8 lg:grid-cols-3">
+      <div class="grid gap-8 lg:grid-cols-3">
         <!-- Main -->
         <div class="space-y-8 lg:col-span-2">
           @if (activeTab() === 'overview' || activeTab() === 'infrastructure') {

@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   HttpInterceptor,
   HttpRequest,
@@ -8,12 +9,22 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminAuthStore } from '../admin/admin-auth.store';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+  private readonly auth = inject(AdminAuthStore);
+  private readonly router = inject(Router);
+
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
+        const isAdminApi = req.url.includes('/admin/') && !req.url.includes('/auth/admin/login');
+        if ((error.status === 401 || error.status === 403) && isAdminApi) {
+          this.auth.clear();
+          this.router.navigate(['/admin/login']);
+        }
+
         const message =
           error.error?.message ||
           (error.status === 0
