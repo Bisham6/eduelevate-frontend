@@ -1,0 +1,128 @@
+<div>
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-primary">Manage Leads</h1>
+      <p class="text-sm text-gray-500">{{ leads().length }} leads in database</p>
+    </div>
+    <div>
+      <label class="sr-only" for="status-filter">Filter by status</label>
+      <select
+        id="status-filter"
+        class="h-10 rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary"
+        [value]="statusFilter()"
+        (change)="onFilterChange($event)"
+      >
+        <option value="">All statuses</option>
+        @for (status of statusOptions; track status) {
+          <option [value]="status">{{ statusLabels[status] }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p class="mt-8 text-gray-500">Loading...</p>
+  } @else if (error()) {
+    <p class="mt-8 text-red-600">{{ error() }}</p>
+  } @else if (!leads().length) {
+    <p class="mt-8 text-gray-500">No leads found.</p>
+  } @else {
+    <div class="mt-6 overflow-x-auto rounded-card bg-white shadow-card">
+      <table class="w-full min-w-[900px] text-left text-sm">
+        <thead class="border-b border-outline-variant bg-surface/50">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-primary">Date</th>
+            <th class="px-4 py-3 font-semibold text-primary">Name</th>
+            <th class="px-4 py-3 font-semibold text-primary">Email</th>
+            <th class="px-4 py-3 font-semibold text-primary">Phone</th>
+            <th class="px-4 py-3 font-semibold text-primary">College</th>
+            <th class="px-4 py-3 font-semibold text-primary">Source</th>
+            <th class="px-4 py-3 font-semibold text-primary">Status</th>
+            <th class="px-4 py-3 font-semibold text-primary">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-outline-variant">
+          @for (lead of leads(); track lead._id) {
+            <tr class="hover:bg-surface/30">
+              <td class="px-4 py-3 text-gray-500">{{ lead.createdAt | date: 'dd MMM yyyy, HH:mm' }}</td>
+              <td class="px-4 py-3 font-medium text-primary">{{ lead.fullName }}</td>
+              <td class="px-4 py-3 text-gray-600">{{ lead.email }}</td>
+              <td class="px-4 py-3 text-gray-600">{{ lead.phone }}</td>
+              <td class="px-4 py-3 text-gray-600">{{ lead.collegeName || '—' }}</td>
+              <td class="px-4 py-3 text-gray-600">{{ sourceLabels[lead.source] }}</td>
+              <td class="px-4 py-3">
+                <span class="rounded-full px-2 py-0.5 text-xs font-medium" [class]="statusClass(lead.status)">
+                  {{ statusLabels[lead.status] }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex gap-2">
+                  <button type="button" class="text-sm text-primary hover:underline" (click)="openManage(lead)">
+                    Manage
+                  </button>
+                  <button type="button" class="text-sm text-red-500 hover:underline" (click)="deleteLead(lead)">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+@if (managingLead(); as lead) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" (click)="closeManage()">
+    <div
+      class="w-full max-w-md rounded-card bg-white p-6 shadow-card"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Manage Lead</h2>
+          <p class="text-sm text-gray-500">{{ lead.fullName }} — {{ lead.email }}</p>
+        </div>
+        <button type="button" class="text-gray-400 hover:text-gray-600" (click)="closeManage()">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div>
+          <label class="mb-1 block text-sm font-medium text-gray-700" for="lead-status">Status</label>
+          <select
+            id="lead-status"
+            class="h-10 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary"
+            [ngModel]="editStatus()"
+            (ngModelChange)="editStatus.set($event)"
+          >
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ statusLabels[status] }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="mb-1 block text-sm font-medium text-gray-700" for="lead-remarks">Remarks</label>
+          <textarea
+            id="lead-remarks"
+            rows="4"
+            class="w-full rounded-btn border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            [ngModel]="editRemarks()"
+            (ngModelChange)="editRemarks.set($event)"
+            placeholder="Add notes about follow-up, conversation details, etc."
+          ></textarea>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" class="btn-primary flex-1" [disabled]="saving()" (click)="saveLead()">
+            {{ saving() ? 'Saving...' : 'Save Changes' }}
+          </button>
+          <button type="button" class="btn-outline" (click)="closeManage()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

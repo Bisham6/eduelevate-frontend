@@ -45,7 +45,7 @@
             <span class="material-symbols-rounded text-lg">download</span>
             Download Brochure
           </button>
-          <button type="button" class="btn-primary !bg-secondary !text-primary-dark">Apply Now</button>
+          <button type="button" class="btn-primary !bg-secondary !text-primary-dark" (click)="onApplyNow()">Apply Now</button>
         </div>
       </div>
     </div>
@@ -198,7 +198,7 @@
             <p class="mt-3 text-sm text-gray-600">{{ c.location.address || c.location.city + ', ' + c.location.state }}</p>
           </div>
 
-          <app-inquiry-form [collegeName]="c.name" />
+          <app-inquiry-form [collegeId]="c._id" [collegeName]="c.name" />
         </div>
       </div>
     </div>

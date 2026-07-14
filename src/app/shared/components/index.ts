@@ -20,4 +20,5 @@ export { CourseCard } from './course-card/course-card';
 export { CourseFilterSidebar } from './course-filter-sidebar/course-filter-sidebar';
 export { SortDropdown } from './sort-dropdown/sort-dropdown';
 export type { SortOption } from './sort-dropdown/sort-dropdown';
+export { LeadCaptureDialog } from './lead-capture-dialog/lead-capture-dialog';
 export type { FaqItem } from './faq-accordion/faq-accordion';

@@ -141,6 +141,12 @@ export const routes: Routes = [
           import('./features/admin/college-admin-form/college-admin-form').then((m) => m.CollegeAdminForm),
         title: 'Edit College — EduElevate',
       },
+      {
+        path: 'leads',
+        loadComponent: () =>
+          import('./features/admin/lead-admin-list/lead-admin-list').then((m) => m.LeadAdminList),
+        title: 'Manage Leads — Admin',
+      },
     ],
   },
   {

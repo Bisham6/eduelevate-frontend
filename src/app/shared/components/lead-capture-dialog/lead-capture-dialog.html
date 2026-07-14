@@ -1,0 +1,125 @@
+<div class="relative overflow-hidden rounded-card bg-white">
+  <button
+    type="button"
+    class="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+    (click)="close()"
+    aria-label="Close"
+  >
+    <span class="material-symbols-rounded text-xl">close</span>
+  </button>
+
+  @if (submitted()) {
+    <div class="px-8 py-12 text-center">
+      <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-50">
+        <span class="material-symbols-rounded text-3xl text-green-600">check_circle</span>
+      </div>
+      <h2 class="text-xl font-bold text-primary">Thank You!</h2>
+      <p class="mt-2 text-sm text-gray-500">
+        Our counselor will contact you shortly with personalized guidance.
+      </p>
+    </div>
+  } @else {
+    <div class="px-8 pb-6 pt-10 text-center">
+      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-container">
+        <span class="material-symbols-rounded text-3xl text-primary">school</span>
+      </div>
+      <h2 class="text-xl font-bold text-primary">Start Your Journey with EduElevate</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-500">
+        Enter your details to get personalized college recommendations and expert career insights
+        tailored to your goals.
+      </p>
+      @if (context.collegeName) {
+        <p class="mt-2 text-xs font-medium text-secondary">Applying to {{ context.collegeName }}</p>
+      }
+    </div>
+
+    <form class="space-y-4 px-8 pb-6" (ngSubmit)="onSubmit()">
+      @if (error()) {
+        <div class="rounded-btn bg-red-50 px-3 py-2 text-sm text-red-600">{{ error() }}</div>
+      }
+
+      <div>
+        <label class="mb-1 block text-xs font-medium text-gray-500" for="lead-name">Full Name</label>
+        <input
+          id="lead-name"
+          type="text"
+          [(ngModel)]="fullName"
+          name="fullName"
+          placeholder="John Doe"
+          required
+          class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      </div>
+
+      <div>
+        <label class="mb-1 block text-xs font-medium text-gray-500" for="lead-email">Email Address</label>
+        <input
+          id="lead-email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="john@example.com"
+          required
+          class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      </div>
+
+      <div>
+        <label class="mb-1 block text-xs font-medium text-gray-500" for="lead-phone">Mobile Number</label>
+        <input
+          id="lead-phone"
+          type="tel"
+          [(ngModel)]="phone"
+          name="phone"
+          placeholder="9876543210"
+          required
+          maxlength="10"
+          class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          [class.border-red-400]="phoneError()"
+        />
+        @if (phoneError()) {
+          <p class="mt-1 text-xs text-red-500">{{ phoneError() }}</p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary flex w-full items-center justify-center gap-2 py-3"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          <span class="material-symbols-rounded animate-spin text-lg">progress_activity</span>
+          Submitting...
+        } @else {
+          Get Expert Guidance
+          <span class="material-symbols-rounded text-lg">arrow_forward</span>
+        }
+      </button>
+
+      <div class="flex items-center justify-center gap-2 pt-1">
+        <div class="flex -space-x-2">
+          <div class="h-6 w-6 rounded-full bg-primary-container ring-2 ring-white"></div>
+          <div class="h-6 w-6 rounded-full bg-secondary/30 ring-2 ring-white"></div>
+          <div class="h-6 w-6 rounded-full bg-primary/20 ring-2 ring-white"></div>
+        </div>
+        <p class="text-xs text-gray-400">Joined by 10k+ students this month</p>
+      </div>
+
+      <button
+        type="button"
+        class="w-full py-2 text-center text-sm text-gray-400 transition-colors hover:text-gray-600"
+        (click)="close()"
+      >
+        Maybe later, I'll explore first
+      </button>
+    </form>
+
+    <div class="flex items-center justify-between border-t border-outline-variant bg-primary-container/30 px-8 py-3">
+      <div class="flex items-center gap-1.5 text-xs text-gray-500">
+        <span class="material-symbols-rounded text-base text-primary">verified_user</span>
+        Secure &amp; Private
+      </div>
+      <p class="text-xs text-gray-400">Partnered with top institutions</p>
+    </div>
+  }
+</div>

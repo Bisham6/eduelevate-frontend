@@ -38,9 +38,9 @@
             </div>
             <h3 class="mt-3 font-bold text-primary">{{ college.name }}</h3>
             <p class="text-sm text-gray-500">{{ college.location.city }}, {{ college.location.state }}</p>
-            <a [routerLink]="['/colleges', college.slug]" class="btn-primary mt-4 block w-full text-center text-sm">
+            <button type="button" class="btn-primary mt-4 w-full text-sm" (click)="onApplyNow(college)">
               Apply Now
-            </a>
+            </button>
           </div>
         }
 

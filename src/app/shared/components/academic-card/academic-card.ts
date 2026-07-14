@@ -1,6 +1,7 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { College } from '../../models';
+import { LeadCaptureService } from '../../services/lead-capture.service';
 import { StatusChip } from '../status-chip/status-chip';
 
 export type AcademicCardVariant = 'featured' | 'listing' | 'compact';
@@ -12,6 +13,8 @@ export type AcademicCardVariant = 'featured' | 'listing' | 'compact';
   styleUrl: './academic-card.scss',
 })
 export class AcademicCard {
+  private readonly leadCapture = inject(LeadCaptureService);
+
   readonly college = input.required<College>();
   readonly variant = input<AcademicCardVariant>('listing');
   readonly showCompare = input(true);
@@ -40,5 +43,14 @@ export class AcademicCard {
       media.hero ||
       'https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=500&fit=crop'
     );
+  }
+
+  protected onApplyNow(): void {
+    const college = this.college();
+    this.leadCapture.open({
+      collegeId: college._id,
+      collegeName: college.name,
+      source: 'apply_now',
+    });
   }
 }
