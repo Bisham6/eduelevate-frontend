@@ -4,7 +4,6 @@ services:
   - type: web
     name: collegechuniye-web
     runtime: static
-    plan: free
     buildCommand: npm install && npm run build:render
     staticPublishPath: ./dist/frontend/browser
     routes:
