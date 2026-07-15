@@ -45,7 +45,7 @@
             <span class="material-symbols-rounded text-lg">download</span>
             Download Brochure
           </button>
-          <button type="button" class="btn-primary !bg-secondary !text-primary-dark" (click)="onApplyNow()">Apply Now</button>
+          <button type="button" class="btn-primary" (click)="onApplyNow()">Apply Now</button>
         </div>
       </div>
     </div>
@@ -134,7 +134,7 @@
             }
           } @else {
             <div class="rounded-card bg-white p-12 text-center shadow-card">
-              <span class="material-symbols-rounded mb-4 text-5xl text-secondary">construction</span>
+              <span class="material-symbols-rounded mb-4 text-5xl text-primary">construction</span>
               <h2 class="text-xl font-bold text-primary">{{ activeTab() | titlecase }} Section</h2>
               <p class="mt-2 text-sm text-gray-500">Detailed {{ activeTab() }} information coming in a future update.</p>
             </div>
@@ -159,14 +159,14 @@
             <h3 class="text-lg font-bold text-primary">Quick Statistics</h3>
             <ul class="mt-4 space-y-4">
               <li class="flex items-center gap-3 text-sm">
-                <span class="material-symbols-rounded text-secondary">payments</span>
+                <span class="material-symbols-rounded text-primary">payments</span>
                 <div>
                   <p class="text-gray-500">Annual Fees</p>
                   <p class="font-semibold text-primary">{{ formatFees(c.stats.avgFeesMin, c.stats.avgFeesMax) }}</p>
                 </div>
               </li>
               <li class="flex items-center gap-3 text-sm">
-                <span class="material-symbols-rounded text-secondary">trending_up</span>
+                <span class="material-symbols-rounded text-primary">trending_up</span>
                 <div>
                   <p class="text-gray-500">Avg. Package</p>
                   <p class="font-semibold text-primary">{{ formatPackage(c.stats.avgPackage) }}</p>
@@ -174,7 +174,7 @@
               </li>
               @if (c.nirfRank) {
                 <li class="flex items-center gap-3 text-sm">
-                  <span class="material-symbols-rounded text-secondary">emoji_events</span>
+                  <span class="material-symbols-rounded text-primary">emoji_events</span>
                   <div>
                     <p class="text-gray-500">NIRF Ranking</p>
                     <p class="font-semibold text-primary">#{{ c.nirfRank }}</p>
@@ -183,7 +183,7 @@
               }
               @if (c.stats.highestPackage) {
                 <li class="flex items-center gap-3 text-sm">
-                  <span class="material-symbols-rounded text-secondary">rocket_launch</span>
+                  <span class="material-symbols-rounded text-primary">rocket_launch</span>
                   <div>
                     <p class="text-gray-500">Highest Package</p>
                     <p class="font-semibold text-primary">{{ formatPackage(c.stats.highestPackage) }}</p>

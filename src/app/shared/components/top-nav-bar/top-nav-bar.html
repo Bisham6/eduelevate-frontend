@@ -1,21 +1,30 @@
 <header class="glass-nav shadow-nav">
   <nav class="container-app flex h-16 items-center justify-between gap-4" aria-label="Main navigation">
-    <a routerLink="/" class="flex shrink-0 items-center gap-2" (click)="closeMobileMenu()">
-      <span class="material-symbols-rounded text-3xl text-secondary">school</span>
-      <span class="text-xl font-bold text-primary">CollegeChuniye</span>
+    <a routerLink="/" class="brand-logo-link flex shrink-0 items-center" (click)="closeMobileMenu()">
+      <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo" />
     </a>
 
     <ul class="hidden items-center gap-8 md:flex" role="list">
       @for (link of navLinks; track link.path) {
         <li>
-          <a
-            [routerLink]="link.path"
-            routerLinkActive="nav-link-active"
-            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
-            class="nav-link text-sm font-medium text-gray-600 transition-colors hover:text-primary"
-          >
-            {{ link.label }}
-          </a>
+          @if (link.comingSoon) {
+            <button
+              type="button"
+              class="nav-link border-0 bg-transparent p-0 text-sm font-medium text-gray-600 transition-colors hover:text-primary"
+              (click)="onComingSoonNav()"
+            >
+              {{ link.label }}
+            </button>
+          } @else {
+            <a
+              [routerLink]="link.path"
+              routerLinkActive="nav-link-active"
+              [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+              class="nav-link text-sm font-medium text-gray-600 transition-colors hover:text-primary"
+            >
+              {{ link.label }}
+            </a>
+          }
         </li>
       }
     </ul>
@@ -64,14 +73,24 @@
       <ul class="space-y-1" role="list">
         @for (link of navLinks; track link.path) {
           <li>
-            <a
-              [routerLink]="link.path"
-              routerLinkActive="bg-primary-container text-primary"
-              (click)="closeMobileMenu()"
-              class="block rounded-btn px-3 py-2 text-sm font-medium text-gray-700"
-            >
-              {{ link.label }}
-            </a>
+            @if (link.comingSoon) {
+              <button
+                type="button"
+                class="block w-full rounded-btn px-3 py-2 text-left text-sm font-medium text-gray-700"
+                (click)="onComingSoonNav()"
+              >
+                {{ link.label }}
+              </button>
+            } @else {
+              <a
+                [routerLink]="link.path"
+                routerLinkActive="bg-primary-container text-primary"
+                (click)="closeMobileMenu()"
+                class="block rounded-btn px-3 py-2 text-sm font-medium text-gray-700"
+              >
+                {{ link.label }}
+              </a>
+            }
           </li>
         }
       </ul>

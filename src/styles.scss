@@ -5,6 +5,8 @@
 @use 'styles/animations';
 @use 'styles/utilities';
 
+@import 'ngx-toastr/toastr';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,8 +15,8 @@ html {
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$cyan-palette,
+        primary: mat.$magenta-palette,
+        tertiary: mat.$magenta-palette,
       ),
       typography: (
         plain-family: Lexend,

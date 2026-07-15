@@ -1,3 +1,19 @@
+.hero-satisfaction-badge {
+  animation: hero-badge-breathe 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes hero-badge-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-6px) scale(1.04);
+  }
+}
+
 .hero-typewriter-cursor {
   display: inline-block;
   width: 3px;
@@ -20,6 +36,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-satisfaction-badge {
+    animation: none;
+  }
+
   .hero-typewriter-cursor {
     display: none;
   }

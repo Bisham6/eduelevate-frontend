@@ -1,22 +1,25 @@
 :root {
-  --color-primary: #1a237e;
-  --color-primary-light: #3949ab;
-  --color-primary-dark: #0d1642;
-  --color-primary-container: #e8eaf6;
+  --color-primary: #a32a87;
+  --color-primary-light: #821c69;
+  --color-primary-dark: #3b002f;
+  --color-primary-container: #fcf8fb;
+  --color-primary-rgb: 163, 42, 135;
+  --color-bg-main: 252, 248, 251;
 
-  --color-secondary: #00bcd4;
-  --color-secondary-light: #4dd0e1;
-  --color-secondary-dark: #00838f;
-  --color-secondary-container: #e0f7fa;
+  --color-secondary: #75566e;
+  --color-secondary-light: #8f6f87;
+  --color-secondary-dark: #5c4358;
+  --color-secondary-container: #ffd7f2;
 
-  --color-surface: #f8f9ff;
-  --color-outline-variant: #ccdbf3;
+  --color-surface: #fcf8fb;
+  --color-outline: #7f747d;
+  --color-outline-variant: #d0c3cc;
 
   --radius-card: 16px;
   --radius-btn: 12px;
 
-  --shadow-card: 0 2px 4px rgba(26, 35, 126, 0.05), 0 8px 24px rgba(26, 35, 126, 0.08);
-  --shadow-nav: 0 1px 3px rgba(26, 35, 126, 0.06);
+  --shadow-card: 0 2px 4px rgba(163, 42, 135, 0.05), 0 8px 24px rgba(163, 42, 135, 0.08);
+  --shadow-nav: 0 1px 3px rgba(163, 42, 135, 0.06);
 
   --app-header-height: 4rem;
 }

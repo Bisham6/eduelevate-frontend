@@ -25,7 +25,7 @@
               @if (college.media.logo) {
                 <img [src]="college.media.logo" [alt]="college.shortName" class="h-10 w-10 object-contain" />
               } @else {
-                <span class="material-symbols-rounded text-3xl text-secondary">school</span>
+                <span class="material-symbols-rounded text-3xl text-primary">school</span>
               }
               <button
                 type="button"
@@ -70,7 +70,7 @@
           @for (metric of metrics(); track metric.label) {
             <div class="grid border-b border-outline-variant last:border-0" [style.grid-template-columns]="'200px repeat(' + colleges().length + ', 1fr)'">
               <div class="flex items-center gap-2 bg-surface/50 p-4 text-sm font-medium text-primary">
-                <span class="material-symbols-rounded text-secondary">{{ metric.icon }}</span>
+                <span class="material-symbols-rounded text-primary">{{ metric.icon }}</span>
                 {{ metric.label }}
               </div>
               @for (val of metric.values; track $index) {
@@ -116,7 +116,7 @@
                   <p class="mb-1 text-sm font-medium text-gray-600">{{ c.shortName || c.name }}</p>
                   <div class="h-3 overflow-hidden rounded-full bg-gray-100">
                     <div
-                      class="h-full rounded-full bg-secondary transition-all"
+                      class="h-full rounded-full bg-primary transition-all"
                       [style.width.%]="feePercent(c)"
                     ></div>
                   </div>
@@ -130,7 +130,7 @@
         </div>
       } @else if (colleges().length === 0) {
         <div class="mt-10 rounded-card border border-dashed border-outline-variant bg-white p-12 text-center">
-          <span class="material-symbols-rounded mb-4 text-5xl text-secondary">compare_arrows</span>
+          <span class="material-symbols-rounded mb-4 text-5xl text-primary">compare_arrows</span>
           <h2 class="text-xl font-bold text-primary">No colleges selected</h2>
           <p class="mt-2 text-sm text-gray-500">Browse colleges and click Compare, or select from the dropdown above.</p>
           <a routerLink="/colleges" class="btn-primary mt-6 inline-block">Browse Colleges</a>

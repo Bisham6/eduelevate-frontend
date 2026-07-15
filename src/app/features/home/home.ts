@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CategoryService, CollegeService, ExamService } from '../../shared/services';
+import { CategoryService, CollegeService, ExamService, LeadCaptureService } from '../../shared/services';
 import { Category, College, Exam } from '../../shared/models';
 import {
   AcademicCard,
@@ -11,6 +11,7 @@ import {
   Skeleton,
 } from '../../shared/components';
 import type { FaqItem } from '../../shared/components';
+import { ToastrService } from 'ngx-toastr';
 import { CompareStore } from '../../shared/stores/compare.store';
 
 @Component({
@@ -33,6 +34,8 @@ export class Home implements OnInit, OnDestroy {
   private readonly examService = inject(ExamService);
   private readonly compareStore = inject(CompareStore);
   private readonly router = inject(Router);
+  private readonly leadCapture = inject(LeadCaptureService);
+  private readonly toastr = inject(ToastrService);
 
   private typewriterTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -221,6 +224,14 @@ export class Home implements OnInit, OnDestroy {
         location: this.searchLocation || undefined,
       },
     });
+  }
+
+  protected onGetExpertGuidance(): void {
+    this.leadCapture.open({ source: 'inquiry_form' });
+  }
+
+  protected onStudyAbroadHubClick(): void {
+    this.toastr.info('Coming soon...');
   }
 
   protected onCompare(college: College): void {

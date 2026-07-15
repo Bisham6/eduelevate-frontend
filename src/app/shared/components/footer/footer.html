@@ -3,9 +3,8 @@
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
       <!-- Brand -->
       <div class="space-y-4">
-        <a routerLink="/" class="flex items-center gap-2">
-          <span class="material-symbols-rounded text-3xl text-secondary">school</span>
-          <span class="text-xl font-bold text-primary">CollegeChuniye</span>
+        <a routerLink="/" class="inline-flex">
+          <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo brand-logo--footer" />
         </a>
         <p class="text-sm leading-relaxed text-gray-600">
           Your trusted platform for college discovery, exam tracking, and academic planning.
@@ -49,11 +48,11 @@
       <p>&copy; {{ currentYear }} CollegeChuniye. All rights reserved.</p>
       <div class="flex items-center gap-4">
         <span class="flex items-center gap-1">
-          <span class="material-symbols-rounded text-base text-secondary">verified</span>
+          <span class="material-symbols-rounded text-base text-primary">verified</span>
           AI Verified Content
         </span>
         <span class="flex items-center gap-1">
-          <span class="material-symbols-rounded text-base text-secondary">lock</span>
+          <span class="material-symbols-rounded text-base text-primary">lock</span>
           Secure Portal
         </span>
       </div>

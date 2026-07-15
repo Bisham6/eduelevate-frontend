@@ -1,4 +1,4 @@
-<article class="hover-lift overflow-hidden rounded-card bg-white shadow-card">
+<article class="hover-lift flex h-full flex-col overflow-hidden rounded-card bg-white shadow-card">
   <!-- Image header -->
   <div class="relative aspect-[16/10] overflow-hidden">
     <img
@@ -31,7 +31,7 @@
   </div>
 
   <!-- Body -->
-  <div class="p-4">
+  <div class="flex flex-1 flex-col p-4">
     @if (college().rating) {
       <div class="mb-1 flex items-center gap-1 text-sm font-medium text-green-600">
         {{ college().rating!.average }}
@@ -39,8 +39,12 @@
       </div>
     }
 
-    <h3 class="text-lg font-bold text-primary">
-      <a [routerLink]="['/colleges', college().slug]" class="hover:underline">{{ college().name }}</a>
+    <h3 class="min-w-0 text-lg font-bold text-primary">
+      <a
+        [routerLink]="['/colleges', college().slug]"
+        class="academic-card__title hover:underline"
+        [title]="college().name"
+      >{{ college().name }}</a>
     </h3>
 
     <p class="mt-1 flex items-center gap-1 text-sm text-gray-500">

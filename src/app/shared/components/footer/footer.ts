@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { BRAND_LOGO_SRC } from '../../constants/brand';
 
 interface FooterLinkGroup {
   title: string;
@@ -13,6 +14,7 @@ interface FooterLinkGroup {
   styleUrl: './footer.scss',
 })
 export class Footer {
+  protected readonly brandLogoSrc = BRAND_LOGO_SRC;
   protected readonly currentYear = new Date().getFullYear();
 
   protected readonly linkGroups: FooterLinkGroup[] = [

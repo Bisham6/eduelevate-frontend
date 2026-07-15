@@ -21,4 +21,5 @@ export { CourseFilterSidebar } from './course-filter-sidebar/course-filter-sideb
 export { SortDropdown } from './sort-dropdown/sort-dropdown';
 export type { SortOption } from './sort-dropdown/sort-dropdown';
 export { LeadCaptureDialog } from './lead-capture-dialog/lead-capture-dialog';
+export { GlobalLoader } from './global-loader/global-loader';
 export type { FaqItem } from './faq-accordion/faq-accordion';
