@@ -3,8 +3,16 @@
   <div class="container-app section-padding">
     <div class="grid items-center gap-12 lg:grid-cols-2">
       <div class="animate-fade-in-up">
-        <h1 class="text-4xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl">
-          Find Your Perfect <span class="text-secondary">Academic Future</span>
+        <h1
+          class="text-4xl font-bold leading-tight md:text-5xl lg:text-6xl"
+          aria-label="Find Your Perfect Academic Future"
+        >
+          <span class="text-primary">{{ heroLine1() }}</span>
+          @if (heroLine2().length || heroLine1().length === heroLine1Text.length) {
+            <br />
+            <span class="text-secondary">{{ heroLine2() }}</span>
+          }
+          <span class="hero-typewriter-cursor" aria-hidden="true"></span>
         </h1>
         <p class="mt-4 text-lg text-gray-600">
           Discover 10,000+ colleges, track entrance exams, and plan your education journey.
