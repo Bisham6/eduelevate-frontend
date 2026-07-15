@@ -23,17 +23,14 @@
           class="mt-8 rounded-card bg-white p-4 shadow-card"
         >
           <div class="grid gap-3 sm:grid-cols-2">
-            <div class="relative">
-              <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-              <input
-                type="search"
-                [(ngModel)]="searchQuery"
-                name="searchQuery"
-                placeholder="Search for colleges..."
-                aria-label="Search colleges"
-                class="h-11 w-full rounded-btn border border-outline-variant pl-10 pr-4 text-sm outline-none focus:border-primary"
-              />
-            </div>
+            <app-search-autocomplete
+              mode="colleges"
+              [(query)]="searchQuery"
+              name="searchQuery"
+              placeholder="Search for colleges..."
+              ariaLabel="Search colleges"
+              (submitted)="onHeroSearch()"
+            />
             <div class="relative">
               <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">location_on</span>
               <input

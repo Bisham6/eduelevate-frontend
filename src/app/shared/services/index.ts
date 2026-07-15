@@ -5,3 +5,4 @@ export * from './search.service';
 export * from './course.service';
 export * from './lead.service';
 export * from './lead-capture.service';
+export * from './search-suggest.service';

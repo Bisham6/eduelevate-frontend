@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Course, CourseFilters, CoursePaginatedResponse } from '../models';
@@ -9,7 +9,7 @@ export class CourseService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/courses`;
 
-  getCourses(filters: CourseFilters = {}): Observable<CoursePaginatedResponse> {
+  getCourses(filters: CourseFilters = {}, context?: HttpContext): Observable<CoursePaginatedResponse> {
     let params = new HttpParams();
 
     if (filters.search) params = params.set('search', filters.search);
@@ -23,7 +23,7 @@ export class CourseService {
     filters.ranking?.forEach((r) => (params = params.append('ranking', r)));
     filters.mode?.forEach((m) => (params = params.append('mode', m)));
 
-    return this.http.get<CoursePaginatedResponse>(this.baseUrl, { params });
+    return this.http.get<CoursePaginatedResponse>(this.baseUrl, { params, context });
   }
 
   getBySlug(slug: string): Observable<Course> {

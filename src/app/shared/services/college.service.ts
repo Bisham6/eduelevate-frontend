@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { College, CollegeFilters, PaginatedResponse } from '../models';
@@ -9,7 +9,7 @@ export class CollegeService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/colleges`;
 
-  getColleges(filters: CollegeFilters = {}): Observable<PaginatedResponse<College>> {
+  getColleges(filters: CollegeFilters = {}, context?: HttpContext): Observable<PaginatedResponse<College>> {
     let params = new HttpParams();
 
     if (filters.search) params = params.set('search', filters.search);
@@ -23,7 +23,7 @@ export class CollegeService {
     filters.nirfRanking?.forEach((r) => (params = params.append('nirfRanking', r)));
     filters.specialization?.forEach((s) => (params = params.append('specialization', s)));
 
-    return this.http.get<PaginatedResponse<College>>(this.baseUrl, { params });
+    return this.http.get<PaginatedResponse<College>>(this.baseUrl, { params, context });
   }
 
   getFeatured(limit = 3): Observable<College[]> {
