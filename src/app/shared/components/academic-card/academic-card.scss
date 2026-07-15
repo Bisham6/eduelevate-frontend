@@ -1,6 +1,8 @@
 :host {
   display: block;
   height: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .academic-card__title {

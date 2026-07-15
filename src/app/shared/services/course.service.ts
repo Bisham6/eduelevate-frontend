@@ -14,7 +14,6 @@ export class CourseService {
 
     if (filters.search) params = params.set('search', filters.search);
     if (filters.budgetRange) params = params.set('budgetRange', filters.budgetRange);
-    if (filters.sort) params = params.set('sort', filters.sort);
     if (filters.page) params = params.set('page', filters.page.toString());
     if (filters.limit) params = params.set('limit', filters.limit.toString());
 

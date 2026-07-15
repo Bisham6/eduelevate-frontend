@@ -11,7 +11,7 @@
 
     <div class="mt-8 grid gap-8 lg:grid-cols-4">
       <!-- Filter sidebar -->
-      <div class="lg:col-span-1">
+      <div class="hidden lg:col-span-1 lg:block">
         <app-filter-sidebar
           [sections]="filterSections()"
           [selectedValues]="selectedFilters()"
@@ -22,25 +22,9 @@
       </div>
 
       <!-- Results -->
-      <div class="lg:col-span-3">
-        <!-- Sort bar -->
-        <div class="mb-6 flex items-center justify-end">
-          <label class="flex items-center gap-2 text-sm text-gray-600">
-            Sort by
-            <select
-              class="rounded-btn border border-outline-variant bg-white px-3 py-2 text-sm outline-none focus:border-primary"
-              [value]="filters().sort"
-              (change)="onSortChange($event)"
-            >
-              @for (opt of sortOptions; track opt.value) {
-                <option [value]="opt.value">{{ opt.label }}</option>
-              }
-            </select>
-          </label>
-        </div>
-
-        @if (loading()) {
-          <div class="grid gap-6 sm:grid-cols-2">
+      <div class="min-w-0 lg:col-span-3">
+        @if (loading() && colleges().length === 0) {
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 [&_app-academic-card]:min-w-0">
             @for (i of [1,2,3,4]; track i) {
               <app-skeleton variant="card" [count]="1" />
             }
@@ -62,20 +46,27 @@
             actionLink="/colleges"
           />
         } @else {
-          <div class="grid gap-6 sm:grid-cols-2">
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 [&_app-academic-card]:min-w-0">
             @for (college of colleges(); track college._id) {
               <app-academic-card [college]="college" (compare)="onCompare($event)" />
             }
           </div>
 
-          <div class="mt-10">
-            <app-pagination
-              [total]="total()"
-              [page]="filters().page ?? 1"
-              [pageSize]="filters().limit ?? 6"
-              (pageChange)="onPageChange($event)"
-            />
-          </div>
+          @if (loadingMore()) {
+            <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 [&_app-academic-card]:min-w-0">
+              @for (i of [1, 2]; track i) {
+                <app-skeleton variant="card" [count]="1" />
+              }
+            </div>
+          }
+
+          <div
+            appInfiniteScroll
+            [disabled]="!hasMore() || loading() || loadingMore()"
+            (loadMore)="onLoadMore()"
+            class="h-px"
+            aria-hidden="true"
+          ></div>
         }
       </div>
     </div>

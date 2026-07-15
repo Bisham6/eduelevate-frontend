@@ -1,7 +1,11 @@
 <div class="flex min-h-screen flex-col bg-surface">
   <app-top-nav-bar />
-  <main class="flex-1">
+  <main class="public-layout__main flex-1">
     <router-outlet />
   </main>
   <app-footer />
+  <app-bottom-nav-bar class="lg:hidden" />
+  <app-whatsapp-fab class="lg:hidden" />
+  <app-mobile-search-sheet />
+  <app-mobile-filter-drawer class="lg:hidden" />
 </div>

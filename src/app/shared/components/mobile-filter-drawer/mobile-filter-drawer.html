@@ -1,0 +1,43 @@
+@if (filterDrawer.open() && filterDrawer.config(); as cfg) {
+  <div class="mobile-filter-drawer" (click)="onBackdropClick($event)" role="presentation">
+    <div
+      class="mobile-filter-drawer__panel"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="cfg.title"
+    >
+      <div class="mobile-filter-drawer__header">
+        <h2 class="mobile-filter-drawer__title">{{ cfg.title }}</h2>
+        <button
+          type="button"
+          class="mobile-filter-drawer__close"
+          (click)="close()"
+          aria-label="Close filters"
+        >
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      @if (cfg.kind === 'course') {
+        <app-course-filter-sidebar
+          [title]="cfg.title"
+          [sections]="cfg.sections()"
+          [selectedValues]="cfg.selectedValues()"
+          (valueChange)="cfg.onValueChange($event)"
+          (clearAll)="cfg.onClearAll()"
+          (apply)="onApply()"
+        />
+      } @else {
+        <app-filter-sidebar
+          [title]="cfg.title"
+          [sections]="cfg.sections()"
+          [selectedValues]="cfg.selectedValues()"
+          (valueChange)="cfg.onValueChange($event)"
+          (clearAll)="cfg.onClearAll()"
+          (apply)="onApply()"
+        />
+      }
+    </div>
+  </div>
+}

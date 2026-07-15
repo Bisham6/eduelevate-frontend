@@ -1,12 +1,11 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ExamFilters, ExamSortOption } from '../models';
+import { ExamFilters } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ExamFilterStore {
   readonly filters = signal<ExamFilters>({
     page: 1,
     limit: 8,
-    sort: 'exam_date_asc',
   });
 
   readonly activeFilterCount = computed(() => {
@@ -22,15 +21,11 @@ export class ExamFilterStore {
     this.filters.update((current) => ({ ...current, ...partial, page: partial.page ?? 1 }));
   }
 
-  setSort(sort: ExamSortOption): void {
-    this.update({ sort, page: 1 });
-  }
-
   setPage(page: number): void {
     this.update({ page });
   }
 
   clearAll(): void {
-    this.filters.set({ page: 1, limit: 8, sort: 'exam_date_asc' });
+    this.filters.set({ page: 1, limit: 8 });
   }
 }

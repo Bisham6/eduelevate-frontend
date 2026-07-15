@@ -1,39 +1,41 @@
-import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, effect, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CourseService } from '../../../shared/services/course.service';
 import { CourseFilterStore } from '../../../shared/stores/course-filter.store';
-import { Course, CourseFilters, CourseSortOption } from '../../../shared/models';
+import { Course, CourseFilters } from '../../../shared/models';
 import {
   CourseFilterSidebar,
   CourseCard,
-  Pagination,
   Skeleton,
   EmptyState,
-  SortDropdown,
 } from '../../../shared/components';
-import { COURSE_FILTER_SECTIONS, COURSE_SORT_OPTIONS } from '../../../shared/config/course-filter.config';
+import { InfiniteScrollDirective } from '../../../shared/directives';
+import { COURSE_FILTER_SECTIONS } from '../../../shared/config/course-filter.config';
 import { SeoService } from '../../../core/services/seo.service';
+import { MobileFilterDrawerService } from '../../../core/services/mobile-filter-drawer.service';
 
 @Component({
   selector: 'app-course-listing',
-  imports: [CourseFilterSidebar, CourseCard, Pagination, Skeleton, EmptyState, SortDropdown],
+  imports: [CourseFilterSidebar, CourseCard, Skeleton, EmptyState, InfiniteScrollDirective],
   templateUrl: './course-listing.html',
   styleUrl: './course-listing.scss',
 })
-export class CourseListing implements OnInit {
+export class CourseListing implements OnInit, OnDestroy {
   private readonly courseService = inject(CourseService);
   private readonly filterStore = inject(CourseFilterStore);
   private readonly route = inject(ActivatedRoute);
   private readonly seo = inject(SeoService);
+  private readonly mobileFilterDrawer = inject(MobileFilterDrawerService);
 
   protected readonly courses = signal<Course[]>([]);
   protected readonly total = signal(0);
   protected readonly loading = signal(true);
+  protected readonly loadingMore = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly isMobile = signal(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
 
   protected readonly filters = this.filterStore.filters;
   protected readonly filterSections = COURSE_FILTER_SECTIONS;
-  protected readonly sortOptions = COURSE_SORT_OPTIONS;
 
   protected readonly selectedFilters = computed(() => {
     const f = this.filters();
@@ -46,6 +48,8 @@ export class CourseListing implements OnInit {
     };
   });
 
+  protected readonly hasMore = computed(() => this.courses().length < this.total());
+
   constructor() {
     effect(() => {
       this.seo.update({
@@ -56,7 +60,22 @@ export class CourseListing implements OnInit {
     });
   }
 
+  @HostListener('window:resize')
+  onResize(): void {
+    this.isMobile.set(window.innerWidth < 1024);
+  }
+
   ngOnInit(): void {
+    this.mobileFilterDrawer.register({
+      kind: 'course',
+      title: 'Refine Search',
+      sections: () => this.filterSections,
+      selectedValues: () => this.selectedFilters(),
+      onValueChange: (event) => this.onFilterChange(event),
+      onClearAll: () => this.onClearFilters(),
+      onApply: () => this.onApplyFilters(),
+    });
+
     this.route.queryParams.subscribe((params) => {
       const updates: Partial<CourseFilters> = {};
       if (params['search']) updates.search = params['search'];
@@ -65,19 +84,33 @@ export class CourseListing implements OnInit {
     });
   }
 
-  protected loadCourses(): void {
-    this.loading.set(true);
+  ngOnDestroy(): void {
+    this.mobileFilterDrawer.unregister();
+  }
+
+  protected loadCourses(append = false): void {
+    if (append) {
+      this.loadingMore.set(true);
+    } else {
+      this.loading.set(true);
+    }
     this.error.set(null);
 
     this.courseService.getCourses(this.filters()).subscribe({
       next: (res) => {
-        this.courses.set(res.data);
+        if (append) {
+          this.courses.update((current) => [...current, ...res.data]);
+        } else {
+          this.courses.set(res.data);
+        }
         this.total.set(res.meta.total);
         this.loading.set(false);
+        this.loadingMore.set(false);
       },
       error: (err) => {
         this.error.set(err.friendlyMessage || 'Failed to load courses. Make sure the backend is running.');
         this.loading.set(false);
+        this.loadingMore.set(false);
       },
     });
   }
@@ -115,18 +148,15 @@ export class CourseListing implements OnInit {
   }
 
   protected onApplyFilters(): void {
+    this.filterStore.setPage(1);
     this.loadCourses();
   }
 
-  protected onSortChange(sort: CourseSortOption): void {
-    this.filterStore.setSort(sort);
-    this.loadCourses();
-  }
-
-  protected onPageChange(page: number): void {
-    this.filterStore.setPage(page);
-    this.loadCourses();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  protected onLoadMore(): void {
+    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+    const nextPage = (this.filters().page ?? 1) + 1;
+    this.filterStore.setPage(nextPage);
+    this.loadCourses(true);
   }
 
   protected onCompare(_course: Course): void {

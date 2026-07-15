@@ -12,20 +12,16 @@
       </div>
 
       <main class="min-w-0 flex-1">
-        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 class="text-3xl font-bold text-primary">Explore Trending Courses</h1>
-            <p class="mt-1 text-sm text-gray-500">Showing {{ total() }} Courses</p>
-          </div>
-          <app-sort-dropdown
-            [options]="sortOptions"
-            [value]="filters().sort ?? 'popularity'"
-            (sortChange)="onSortChange($event)"
-          />
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-primary sm:text-3xl">Explore Trending Courses</h1>
+          <p class="mt-1 text-sm text-gray-500">
+            <span class="lg:hidden">Top-tier programs selected for your future career.</span>
+            <span class="hidden lg:inline">Showing {{ total() }} Courses</span>
+          </p>
         </div>
 
-        @if (loading()) {
-          <div class="grid gap-6 md:grid-cols-2">
+        @if (loading() && courses().length === 0) {
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 [&_app-course-card]:min-w-0">
             @for (i of [1,2,3,4]; track i) {
               <app-skeleton variant="card" [count]="1" />
             }
@@ -43,20 +39,27 @@
             actionLink="/courses"
           />
         } @else {
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 [&_app-course-card]:min-w-0">
             @for (course of courses(); track course._id; let i = $index) {
-              <app-course-card [course]="course" [index]="i" (compare)="onCompare($event)" />
+              <app-course-card [course]="course" [index]="i" [compact]="isMobile()" (compare)="onCompare($event)" />
             }
           </div>
 
-          <div class="mt-12 flex justify-center">
-            <app-pagination
-              [total]="total()"
-              [page]="filters().page ?? 1"
-              [pageSize]="filters().limit ?? 6"
-              (pageChange)="onPageChange($event)"
-            />
-          </div>
+          @if (loadingMore()) {
+            <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+              @for (i of [1, 2]; track i) {
+                <app-skeleton variant="card" [count]="1" />
+              }
+            </div>
+          }
+
+          <div
+            appInfiniteScroll
+            [disabled]="!hasMore() || loading() || loadingMore()"
+            (loadMore)="onLoadMore()"
+            class="h-px"
+            aria-hidden="true"
+          ></div>
         }
       </main>
     </div>

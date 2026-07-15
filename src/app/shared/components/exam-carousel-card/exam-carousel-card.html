@@ -1,0 +1,12 @@
+<article class="exam-carousel-card">
+  <div class="exam-carousel-card__header">
+    <span class="exam-carousel-card__category">{{ categoryLabel() }}</span>
+    <span class="exam-carousel-card__date">{{ formatDate(exam().examDate) }}</span>
+  </div>
+  <h3 class="exam-carousel-card__title">{{ exam().name }}</h3>
+  <p class="exam-carousel-card__desc">{{ description() }}</p>
+  <div class="exam-carousel-card__footer">
+    <span class="exam-carousel-card__status">REGISTRATIONS Closing Soon</span>
+    <a [routerLink]="['/exams']" class="exam-carousel-card__btn">Explore</a>
+  </div>
+</article>

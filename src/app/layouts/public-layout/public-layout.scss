@@ -1,0 +1,9 @@
+.public-layout__main {
+  min-width: 0;
+  overflow-x: clip;
+  padding-bottom: calc(var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom));
+
+  @media (min-width: 1024px) {
+    padding-bottom: 0;
+  }
+}

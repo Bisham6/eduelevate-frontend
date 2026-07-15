@@ -13,7 +13,6 @@ export class ExamService {
     let params = new HttpParams();
 
     if (filters.search) params = params.set('search', filters.search);
-    if (filters.sort) params = params.set('sort', filters.sort);
     if (filters.page) params = params.set('page', filters.page.toString());
     if (filters.limit) params = params.set('limit', filters.limit.toString());
 

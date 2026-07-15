@@ -1,11 +1,30 @@
 <a
   [routerLink]="['/colleges']"
   [queryParams]="{ category: category().slug }"
-  class="hover-lift flex flex-col items-center rounded-card bg-white p-6 text-center shadow-card"
+  class="category-card hover-lift"
+  [class.category-card--compact]="compact()"
+  [class.flex]="!compact()"
+  [class.flex-col]="!compact()"
+  [class.items-center]="!compact()"
+  [class.rounded-card]="!compact()"
+  [class.bg-white]="!compact()"
+  [class.p-6]="!compact()"
+  [class.text-center]="!compact()"
+  [class.shadow-card]="!compact()"
 >
-  <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-    <span class="material-symbols-rounded text-3xl">{{ category().icon }}</span>
+  <div
+    class="flex items-center justify-center rounded-xl bg-primary/10 text-primary"
+    [class.category-card__icon]="compact()"
+    [class.mb-3]="!compact()"
+    [class.h-14]="!compact()"
+    [class.w-14]="!compact()"
+  >
+    <span class="material-symbols-rounded" [class.text-3xl]="!compact()" [class.text-2xl]="compact()">{{ category().icon }}</span>
   </div>
-  <h3 class="font-semibold text-primary">{{ category().name }}</h3>
-  <p class="mt-1 text-sm text-gray-500">{{ category().collegeCount | number }}+ Colleges</p>
+  <h3 class="font-semibold text-primary" [class.text-sm]="compact()" [class.mt-2]="compact()" [class.lg:text-base]="compact()" [class.lg:mt-0]="compact()">{{ category().name }}</h3>
+  @if (!compact()) {
+    <p class="mt-1 text-sm text-gray-500">{{ category().collegeCount | number }}+ Colleges</p>
+  } @else {
+    <p class="mt-1 hidden text-sm text-gray-500 lg:block">{{ category().collegeCount | number }}+ Colleges</p>
+  }
 </a>

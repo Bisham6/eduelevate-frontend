@@ -1,4 +1,4 @@
-<article class="hover-lift overflow-hidden rounded-card bg-white shadow-card">
+<article class="hover-lift w-full min-w-0 overflow-hidden rounded-card bg-white shadow-card">
   <!-- Header -->
   <div class="bg-gradient-to-br from-primary to-secondary px-5 py-4">
     <app-status-chip [label]="categoryLabel()" [variant]="categoryVariant()" />
@@ -6,33 +6,33 @@
   </div>
 
   <!-- Info grid -->
-  <div class="grid grid-cols-2 gap-px bg-outline-variant">
-    <div class="bg-white p-4">
+  <div class="grid min-w-0 grid-cols-2 gap-px bg-outline-variant">
+    <div class="min-w-0 bg-white p-4">
       <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-400">Registration Ends</p>
-      <p class="mt-1 flex items-center gap-1 text-sm font-medium text-primary">
+      <p class="mt-1 flex items-center gap-1 break-words text-sm font-medium text-primary">
         <span class="material-symbols-rounded text-base">event</span>
         {{ formatDate(exam().registrationEnd) }}
       </p>
     </div>
-    <div class="bg-white p-4">
+    <div class="min-w-0 bg-white p-4">
       <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-400">Exam Date</p>
-      <p class="mt-1 flex items-center gap-1 text-sm font-medium text-primary">
+      <p class="mt-1 flex items-center gap-1 break-words text-sm font-medium text-primary">
         <span class="material-symbols-rounded text-base">calendar_month</span>
         {{ formatDate(exam().examDate) }}
       </p>
     </div>
-    <div class="bg-white p-4">
+    <div class="min-w-0 bg-white p-4">
       <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-400">Difficulty</p>
-      <p class="mt-1 flex items-center gap-2 text-sm font-medium capitalize text-gray-700">
+      <p class="mt-1 flex items-center gap-2 break-words text-sm font-medium capitalize text-gray-700">
         <span class="h-2 w-2 rounded-full" [class]="difficultyColor()"></span>
         {{ exam().difficulty.replace('_', ' ') }}
       </p>
     </div>
-    <div class="bg-white p-4">
+    <div class="min-w-0 bg-white p-4">
       <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
         {{ exam().resultDate ? 'Result Date' : 'Target Institutes' }}
       </p>
-      <p class="mt-1 text-sm font-medium text-gray-700">
+      <p class="mt-1 break-words text-sm font-medium text-gray-700">
         @if (exam().resultDate) {
           {{ formatDate(exam().resultDate!) }}
         } @else {
@@ -53,7 +53,7 @@
   }
 
   <!-- Actions -->
-  <div class="flex items-center justify-between border-t border-outline-variant px-4 py-3">
+  <div class="flex min-w-0 flex-wrap items-center justify-between gap-3 border-t border-outline-variant px-4 py-3">
     @if (exam().syllabusUrl) {
       <a [href]="exam().syllabusUrl" target="_blank" class="text-sm font-medium text-primary hover:underline">
         Full Syllabus

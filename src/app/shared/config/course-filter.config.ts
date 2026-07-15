@@ -69,10 +69,3 @@ export const COURSE_FILTER_ICONS: Record<string, string> = {
   ranking: 'leaderboard',
   mode: 'devices',
 };
-
-export const COURSE_SORT_OPTIONS = [
-  { label: 'Popularity', value: 'popularity' as const },
-  { label: 'Salary (High to Low)', value: 'salary_desc' as const },
-  { label: 'Salary (Low to High)', value: 'salary_asc' as const },
-  { label: 'A–Z', value: 'title_asc' as const },
-];

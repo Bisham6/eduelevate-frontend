@@ -23,9 +23,6 @@ export interface ExamFilters {
   category?: string[];
   difficulty?: string[];
   examMode?: string[];
-  sort?: ExamSortOption;
   page?: number;
   limit?: number;
 }
-
-export type ExamSortOption = 'exam_date_asc' | 'exam_date_desc' | 'name_asc';

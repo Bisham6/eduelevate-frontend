@@ -28,8 +28,6 @@ export interface Course {
   isPublished?: boolean;
 }
 
-export type CourseSortOption = 'popularity' | 'salary_desc' | 'salary_asc' | 'title_asc';
-
 export interface CourseFilters {
   search?: string;
   category?: string[];
@@ -37,7 +35,6 @@ export interface CourseFilters {
   budgetRange?: string;
   ranking?: string[];
   mode?: string[];
-  sort?: CourseSortOption;
   page?: number;
   limit?: number;
 }

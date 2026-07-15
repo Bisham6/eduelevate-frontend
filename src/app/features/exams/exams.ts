@@ -1,33 +1,37 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { ExamService } from '../../shared/services/exam.service';
 import { ExamFilterStore } from '../../shared/stores/exam-filter.store';
-import { Exam, ExamSortOption, FilterSection } from '../../shared/models';
+import { Exam, FilterSection } from '../../shared/models';
 import {
   SectionHeader,
   SearchBar,
   FilterSidebar,
   ExamCard,
-  Pagination,
   Skeleton,
   EmptyState,
 } from '../../shared/components';
+import { InfiniteScrollDirective } from '../../shared/directives';
+import { MobileFilterDrawerService } from '../../core/services/mobile-filter-drawer.service';
 
 @Component({
   selector: 'app-exams',
-  imports: [SectionHeader, SearchBar, FilterSidebar, ExamCard, Pagination, Skeleton, EmptyState],
+  imports: [SectionHeader, SearchBar, FilterSidebar, ExamCard, Skeleton, EmptyState, InfiniteScrollDirective],
   templateUrl: './exams.html',
   styleUrl: './exams.scss',
 })
-export class Exams implements OnInit {
+export class Exams implements OnInit, OnDestroy {
   private readonly examService = inject(ExamService);
   private readonly filterStore = inject(ExamFilterStore);
+  private readonly mobileFilterDrawer = inject(MobileFilterDrawerService);
 
   protected readonly exams = signal<Exam[]>([]);
   protected readonly total = signal(0);
   protected readonly loading = signal(true);
+  protected readonly loadingMore = signal(false);
   protected readonly error = signal<string | null>(null);
 
   protected readonly filters = this.filterStore.filters;
+  protected readonly hasMore = computed(() => this.exams().length < this.total());
   protected readonly selectedFilters = computed(() => {
     const f = this.filters();
     return {
@@ -74,22 +78,46 @@ export class Exams implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.mobileFilterDrawer.register({
+      kind: 'standard',
+      title: 'Refine Search',
+      sections: () => this.filterSections,
+      selectedValues: () => this.selectedFilters(),
+      onValueChange: (event) => this.onFilterChange(event),
+      onClearAll: () => this.onClearFilters(),
+      onApply: () => this.onApplyFilters(),
+    });
+
     this.loadExams();
   }
 
-  protected loadExams(): void {
-    this.loading.set(true);
+  ngOnDestroy(): void {
+    this.mobileFilterDrawer.unregister();
+  }
+
+  protected loadExams(append = false): void {
+    if (append) {
+      this.loadingMore.set(true);
+    } else {
+      this.loading.set(true);
+    }
     this.error.set(null);
 
     this.examService.getExams(this.filters()).subscribe({
       next: (res) => {
-        this.exams.set(res.data);
+        if (append) {
+          this.exams.update((current) => [...current, ...res.data]);
+        } else {
+          this.exams.set(res.data);
+        }
         this.total.set(res.meta.total);
         this.loading.set(false);
+        this.loadingMore.set(false);
       },
       error: (err) => {
         this.error.set(err.friendlyMessage || 'Failed to load exams. Make sure the backend is running.');
         this.loading.set(false);
+        this.loadingMore.set(false);
       },
     });
   }
@@ -131,18 +159,14 @@ export class Exams implements OnInit {
   }
 
   protected onApplyFilters(): void {
+    this.filterStore.setPage(1);
     this.loadExams();
   }
 
-  protected onSortChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as ExamSortOption;
-    this.filterStore.setSort(value);
-    this.loadExams();
-  }
-
-  protected onPageChange(page: number): void {
-    this.filterStore.setPage(page);
-    this.loadExams();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  protected onLoadMore(): void {
+    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+    const nextPage = (this.filters().page ?? 1) + 1;
+    this.filterStore.setPage(nextPage);
+    this.loadExams(true);
   }
 }

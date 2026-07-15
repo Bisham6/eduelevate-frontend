@@ -1,4 +1,4 @@
-export type LeadSource = 'apply_now' | 'inquiry_form' | 'compare';
+export type LeadSource = 'apply_now' | 'inquiry_form' | 'compare' | 'get_started';
 
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'closed';
 
@@ -48,4 +48,5 @@ export const LEAD_SOURCE_LABELS: Record<LeadSource, string> = {
   apply_now: 'Apply Now',
   inquiry_form: 'Inquiry Form',
   compare: 'Compare',
+  get_started: 'Get Started',
 };

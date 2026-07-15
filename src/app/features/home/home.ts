@@ -10,6 +10,7 @@ import {
   FaqAccordion,
   Skeleton,
   SearchAutocomplete,
+  ExamCarouselCard,
 } from '../../shared/components';
 import type { FaqItem } from '../../shared/components';
 import { ToastrService } from 'ngx-toastr';
@@ -26,6 +27,7 @@ import { CompareStore } from '../../shared/stores/compare.store';
     FaqAccordion,
     Skeleton,
     SearchAutocomplete,
+    ExamCarouselCard,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -219,7 +221,10 @@ export class Home implements OnInit, OnDestroy {
     }
   }
 
-  protected onHeroSearch(): void {
+  protected onHeroSearch(query?: string): void {
+    if (query !== undefined) {
+      this.searchQuery = query;
+    }
     this.router.navigate(['/colleges'], {
       queryParams: {
         search: this.searchQuery || undefined,

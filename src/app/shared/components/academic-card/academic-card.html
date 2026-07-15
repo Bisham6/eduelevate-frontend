@@ -1,4 +1,4 @@
-<article class="hover-lift flex h-full flex-col overflow-hidden rounded-card bg-white shadow-card">
+<article class="hover-lift flex h-full w-full min-w-0 flex-col overflow-hidden rounded-card bg-white shadow-card">
   <!-- Image header -->
   <div class="relative aspect-[16/10] overflow-hidden">
     <img
@@ -16,7 +16,7 @@
       />
     }
     @if (college().nirfRank) {
-      <div class="absolute left-1/2 top-3 -translate-x-1/2">
+      <div class="absolute left-3 top-3 lg:left-1/2 lg:top-3 lg:-translate-x-1/2">
         <app-status-chip [label]="'NIRF #' + college().nirfRank" variant="nirf" />
       </div>
     }
@@ -31,7 +31,7 @@
   </div>
 
   <!-- Body -->
-  <div class="flex flex-1 flex-col p-4">
+  <div class="flex min-w-0 flex-1 flex-col p-4">
     @if (college().rating) {
       <div class="mb-1 flex items-center gap-1 text-sm font-medium text-green-600">
         {{ college().rating!.average }}
@@ -52,21 +52,21 @@
       {{ college().location.city }}, {{ college().location.state }}
     </p>
 
-    <div class="mt-4 grid grid-cols-2 gap-3">
-      <div class="rounded-btn bg-secondary/10 px-3 py-2">
+    <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div class="min-w-0 rounded-btn bg-secondary/10 px-3 py-2">
         <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-500">Avg Fees</p>
-        <p class="text-sm font-bold text-primary">
+        <p class="break-words text-sm font-bold text-primary">
           {{ formatFees(college().stats.avgFeesMin, college().stats.avgFeesMax) }}
         </p>
       </div>
-      <div class="rounded-btn bg-primary-container px-3 py-2">
+      <div class="min-w-0 rounded-btn bg-primary-container px-3 py-2">
         <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-500">Avg Package</p>
-        <p class="text-sm font-bold text-primary">{{ formatPackage(college().stats.avgPackage) }}</p>
+        <p class="break-words text-sm font-bold text-primary">{{ formatPackage(college().stats.avgPackage) }}</p>
       </div>
     </div>
 
-    <div class="mt-4 flex gap-2">
-      <button type="button" class="btn-primary flex-1 text-sm" (click)="onApplyNow()">
+    <div class="mt-4 flex min-w-0 gap-2">
+      <button type="button" class="btn-primary min-w-0 flex-1 text-sm" (click)="onApplyNow()">
         Apply Now
       </button>
       @if (showCompare()) {

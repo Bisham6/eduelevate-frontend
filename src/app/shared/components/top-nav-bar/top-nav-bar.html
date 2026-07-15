@@ -1,10 +1,34 @@
 <header class="glass-nav shadow-nav">
-  <nav class="container-app flex h-16 items-center justify-between gap-4" aria-label="Main navigation">
-    <a routerLink="/" class="brand-logo-link flex shrink-0 items-center" (click)="closeMobileMenu()">
-      <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo" />
+  <nav class="container-app flex h-16 items-center gap-4 lg:justify-between" aria-label="Main navigation">
+    <!-- Mobile: hamburger -->
+    <button
+      type="button"
+      class="inline-flex items-center justify-center rounded-btn p-2 text-primary lg:hidden"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      aria-controls="mobile-menu"
+      aria-label="Toggle navigation menu"
+    >
+      <span class="material-symbols-rounded">{{ mobileMenuOpen() ? 'close' : 'menu' }}</span>
+    </button>
+
+    <!-- Logo -->
+    <a routerLink="/" class="brand-logo-link flex min-w-0 items-center lg:shrink-0" (click)="closeMobileMenu()">
+      <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo mx-auto lg:mx-0" />
     </a>
 
-    <ul class="hidden items-center gap-8 md:flex" role="list">
+    <!-- Mobile: search icon -->
+    <button
+      type="button"
+      class="inline-flex items-center justify-center rounded-btn p-2 text-primary lg:hidden"
+      (click)="openMobileSearch()"
+      aria-label="Open search"
+    >
+      <span class="material-symbols-rounded">search</span>
+    </button>
+
+    <!-- Desktop nav links -->
+    <ul class="hidden items-center gap-8 lg:flex" role="list">
       @for (link of navLinks; track link.path) {
         <li>
           @if (link.comingSoon) {
@@ -29,6 +53,7 @@
       }
     </ul>
 
+    <!-- Desktop actions -->
     <div class="hidden items-center gap-3 lg:flex">
       <form (submit)="onSearch($event)" class="relative w-52 transition-all focus-within:w-64 xl:w-64">
         <app-search-autocomplete
@@ -41,61 +66,70 @@
         />
       </form>
       <a routerLink="/admin/login" class="px-3 text-sm font-medium text-gray-500 hover:text-primary" title="Admin panel">Admin</a>
-      <button type="button" class="btn-primary">Get Started</button>
+      <button type="button" class="btn-primary" (click)="onGetStarted()">Get Started</button>
     </div>
+  </nav>
+</header>
 
+<!-- Mobile side drawer -->
+<div
+  class="mobile-drawer-backdrop lg:hidden"
+  [class.mobile-drawer-backdrop--open]="mobileMenuOpen()"
+  (click)="closeMobileMenu()"
+  aria-hidden="true"
+></div>
+
+<aside
+  id="mobile-menu"
+  class="mobile-drawer lg:hidden"
+  [class.mobile-drawer--open]="mobileMenuOpen()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+>
+  <div class="mobile-drawer__header">
+    <a routerLink="/" class="mobile-drawer__logo" (click)="closeMobileMenu()">
+      <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo" />
+    </a>
     <button
       type="button"
-      class="inline-flex items-center justify-center rounded-btn p-2 text-primary md:hidden"
-      (click)="toggleMobileMenu()"
-      [attr.aria-expanded]="mobileMenuOpen()"
-      aria-controls="mobile-menu"
-      aria-label="Toggle navigation menu"
+      class="mobile-drawer__close"
+      (click)="closeMobileMenu()"
+      aria-label="Close navigation menu"
     >
-      <span class="material-symbols-rounded">{{ mobileMenuOpen() ? 'close' : 'menu' }}</span>
+      <span class="material-symbols-rounded">close</span>
     </button>
+  </div>
+
+  <nav class="mobile-drawer__nav">
+    <ul class="space-y-1" role="list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          @if (link.comingSoon) {
+            <button
+              type="button"
+              class="mobile-drawer__link w-full text-left"
+              (click)="onComingSoonNav()"
+            >
+              {{ link.label }}
+            </button>
+          } @else {
+            <a
+              [routerLink]="link.path"
+              routerLinkActive="mobile-drawer__link--active"
+              (click)="closeMobileMenu()"
+              class="mobile-drawer__link"
+            >
+              {{ link.label }}
+            </a>
+          }
+        </li>
+      }
+    </ul>
   </nav>
 
-  @if (mobileMenuOpen()) {
-    <div id="mobile-menu" class="border-t border-outline-variant bg-white px-4 py-4 md:hidden">
-      <form (submit)="onSearch($event)" class="relative mb-4">
-        <app-search-autocomplete
-          [mode]="searchMode"
-          [(query)]="searchQuery"
-          name="navSearchMobile"
-          [placeholder]="searchPlaceholder"
-          [ariaLabel]="searchPlaceholder"
-          inputClass="h-10 w-full rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-        />
-      </form>
-      <ul class="space-y-1" role="list">
-        @for (link of navLinks; track link.path) {
-          <li>
-            @if (link.comingSoon) {
-              <button
-                type="button"
-                class="block w-full rounded-btn px-3 py-2 text-left text-sm font-medium text-gray-700"
-                (click)="onComingSoonNav()"
-              >
-                {{ link.label }}
-              </button>
-            } @else {
-              <a
-                [routerLink]="link.path"
-                routerLinkActive="bg-primary-container text-primary"
-                (click)="closeMobileMenu()"
-                class="block rounded-btn px-3 py-2 text-sm font-medium text-gray-700"
-              >
-                {{ link.label }}
-              </a>
-            }
-          </li>
-        }
-      </ul>
-      <div class="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
-        <a routerLink="/admin/login" class="btn-outline w-full text-center" (click)="closeMobileMenu()">Admin</a>
-        <button type="button" class="btn-primary w-full">Get Started</button>
-      </div>
-    </div>
-  }
-</header>
+  <div class="mobile-drawer__actions">
+    <a routerLink="/admin/login" class="btn-outline w-full text-center" (click)="closeMobileMenu()">Admin</a>
+    <button type="button" class="btn-primary w-full" (click)="onGetStarted()">Get Started</button>
+  </div>
+</aside>
