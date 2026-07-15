@@ -30,15 +30,14 @@
     </ul>
 
     <div class="hidden items-center gap-3 lg:flex">
-      <form (submit)="onSearch($event)" class="relative">
-        <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400">search</span>
-        <input
-          type="search"
-          [(ngModel)]="searchQuery"
+      <form (submit)="onSearch($event)" class="relative w-52 transition-all focus-within:w-64 xl:w-64">
+        <app-search-autocomplete
+          [mode]="searchMode"
+          [(query)]="searchQuery"
           name="navSearch"
-          placeholder="{{ searchPlaceholder }}"
-          aria-label="{{ searchPlaceholder }}"
-          class="h-10 w-52 rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none transition-all focus:w-64 focus:border-primary focus:ring-2 focus:ring-primary/20 xl:w-64"
+          [placeholder]="searchPlaceholder"
+          [ariaLabel]="searchPlaceholder"
+          inputClass="h-10 w-full rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </form>
       <a routerLink="/admin/login" class="px-3 text-sm font-medium text-gray-500 hover:text-primary" title="Admin panel">Admin</a>
@@ -60,14 +59,13 @@
   @if (mobileMenuOpen()) {
     <div id="mobile-menu" class="border-t border-outline-variant bg-white px-4 py-4 md:hidden">
       <form (submit)="onSearch($event)" class="relative mb-4">
-        <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400">search</span>
-        <input
-          type="search"
-          [(ngModel)]="searchQuery"
+        <app-search-autocomplete
+          [mode]="searchMode"
+          [(query)]="searchQuery"
           name="navSearchMobile"
-          placeholder="{{ searchPlaceholder }}"
-          aria-label="{{ searchPlaceholder }}"
-          class="h-10 w-full rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          [placeholder]="searchPlaceholder"
+          [ariaLabel]="searchPlaceholder"
+          inputClass="h-10 w-full rounded-btn border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </form>
       <ul class="space-y-1" role="list">

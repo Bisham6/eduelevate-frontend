@@ -22,4 +22,5 @@ export { SortDropdown } from './sort-dropdown/sort-dropdown';
 export type { SortOption } from './sort-dropdown/sort-dropdown';
 export { LeadCaptureDialog } from './lead-capture-dialog/lead-capture-dialog';
 export { GlobalLoader } from './global-loader/global-loader';
+export { SearchAutocomplete } from './search-autocomplete/search-autocomplete';
 export type { FaqItem } from './faq-accordion/faq-accordion';

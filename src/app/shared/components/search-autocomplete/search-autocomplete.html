@@ -1,0 +1,54 @@
+<div class="search-autocomplete">
+  <span class="material-symbols-rounded search-autocomplete__icon">search</span>
+  <input
+    #inputEl
+    type="search"
+    [ngModel]="query()"
+    (ngModelChange)="onInput($event)"
+    (focus)="onFocus()"
+    (keydown)="onKeydown($event)"
+    [name]="name()"
+    [placeholder]="placeholder()"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-expanded]="panelOpen()"
+    [attr.aria-controls]="listboxId"
+    role="combobox"
+    autocomplete="off"
+    [class]="inputClass()"
+  />
+
+  @if (panelOpen() && query().trim().length >= 2) {
+    <ul
+      [id]="listboxId"
+      class="search-autocomplete__panel"
+      role="listbox"
+      [attr.aria-label]="ariaLabel() + ' suggestions'"
+    >
+      @if (loading()) {
+        <li class="search-autocomplete__status" role="status">Searching...</li>
+      } @else if (suggestions().length === 0) {
+        <li class="search-autocomplete__status">No results found</li>
+      } @else {
+        @for (item of suggestions(); track item.id) {
+          <li role="presentation">
+            <button
+              type="button"
+              class="search-autocomplete__option"
+              role="option"
+              (mousedown)="$event.preventDefault()"
+              (click)="selectSuggestion(item)"
+            >
+              <span class="material-symbols-rounded search-autocomplete__option-icon">{{ item.icon }}</span>
+              <span class="min-w-0 flex-1 text-left">
+                <span class="block truncate text-sm font-medium text-primary">{{ item.label }}</span>
+                @if (item.subtitle) {
+                  <span class="block truncate text-xs text-gray-500">{{ item.subtitle }}</span>
+                }
+              </span>
+            </button>
+          </li>
+        }
+      }
+    </ul>
+  }
+</div>

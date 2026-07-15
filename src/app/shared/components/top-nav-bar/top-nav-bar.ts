@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BRAND_LOGO_SRC } from '../../constants/brand';
+import { SearchAutocomplete } from '../search-autocomplete/search-autocomplete';
 
 interface NavLink {
   label: string;
@@ -12,7 +13,7 @@ interface NavLink {
 
 @Component({
   selector: 'app-top-nav-bar',
-  imports: [RouterLink, RouterLinkActive, FormsModule],
+  imports: [RouterLink, RouterLinkActive, FormsModule, SearchAutocomplete],
   templateUrl: './top-nav-bar.html',
   styleUrl: './top-nav-bar.scss',
 })
@@ -30,6 +31,12 @@ export class TopNavBar {
     { label: 'Exams', path: '/exams' },
     { label: 'Study Abroad', path: '/study-abroad', comingSoon: true },
   ];
+
+  protected get searchMode(): 'colleges' | 'courses' | 'exams' {
+    if (this.router.url.startsWith('/courses')) return 'courses';
+    if (this.router.url.startsWith('/exams')) return 'exams';
+    return 'colleges';
+  }
 
   protected get searchPlaceholder(): string {
     return this.router.url.startsWith('/courses') ? 'Search courses...' : 'Search colleges...';

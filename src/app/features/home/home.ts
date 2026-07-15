@@ -9,6 +9,7 @@ import {
   SectionHeader,
   FaqAccordion,
   Skeleton,
+  SearchAutocomplete,
 } from '../../shared/components';
 import type { FaqItem } from '../../shared/components';
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +25,7 @@ import { CompareStore } from '../../shared/stores/compare.store';
     SectionHeader,
     FaqAccordion,
     Skeleton,
+    SearchAutocomplete,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
