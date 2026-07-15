@@ -1,4 +1,4 @@
-<div class="relative overflow-hidden rounded-card bg-white">
+<div class="lead-dialog relative overflow-hidden rounded-card border-t-4 border-primary bg-white">
   <button
     type="button"
     class="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
@@ -19,68 +19,67 @@
       </p>
     </div>
   } @else {
-    <div class="px-8 pb-6 pt-10 text-center">
-      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-container">
-        <span class="material-symbols-rounded text-3xl text-primary">school</span>
+    <div class="px-6 pb-4 pt-10 text-center sm:px-8">
+      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-white">
+        <span class="material-symbols-rounded text-3xl">school</span>
       </div>
-      <h2 class="text-xl font-bold text-primary">Start Your Journey with CollegeChuniye</h2>
+      <h2 class="text-xl font-bold text-gray-900">Start Your Journey</h2>
       <p class="mt-2 text-sm leading-relaxed text-gray-500">
-        Enter your details to get personalized college recommendations and expert career insights
-        tailored to your goals.
+        Connect with our academic experts and discover the perfect college for your future.
       </p>
       @if (context.collegeName) {
         <p class="mt-2 text-xs font-medium text-secondary">Applying to {{ context.collegeName }}</p>
       }
     </div>
 
-    <form class="space-y-4 px-8 pb-6" (ngSubmit)="onSubmit()">
+    <form class="space-y-3 px-6 pb-6 sm:space-y-4 sm:px-8" (ngSubmit)="onSubmit()">
       @if (error()) {
         <div class="rounded-btn bg-red-50 px-3 py-2 text-sm text-red-600">{{ error() }}</div>
       }
 
-      <div>
-        <label class="mb-1 block text-xs font-medium text-gray-500" for="lead-name">Full Name</label>
+      <div class="lead-dialog__field">
+        <span class="material-symbols-rounded lead-dialog__field-icon">person</span>
         <input
           id="lead-name"
           type="text"
           [(ngModel)]="fullName"
           name="fullName"
-          placeholder="John Doe"
+          placeholder="Full Name"
           required
-          class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          class="lead-dialog__input"
         />
       </div>
 
-      <div>
-        <label class="mb-1 block text-xs font-medium text-gray-500" for="lead-email">Email Address</label>
+      <div class="lead-dialog__field">
+        <span class="material-symbols-rounded lead-dialog__field-icon">mail</span>
         <input
           id="lead-email"
           type="email"
           [(ngModel)]="email"
           name="email"
-          placeholder="john@example.com"
+          placeholder="Email Address"
           required
-          class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          class="lead-dialog__input"
         />
       </div>
 
-      <div>
-        <label class="mb-1 block text-xs font-medium text-gray-500" for="lead-phone">Mobile Number</label>
+      <div class="lead-dialog__field">
+        <span class="material-symbols-rounded lead-dialog__field-icon">smartphone</span>
         <input
           id="lead-phone"
           type="tel"
           [(ngModel)]="phone"
           name="phone"
-          placeholder="9876543210"
+          placeholder="Mobile Number"
           required
           maxlength="10"
-          class="h-11 w-full rounded-btn border border-outline-variant px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          class="lead-dialog__input"
           [class.border-red-400]="phoneError()"
         />
-        @if (phoneError()) {
-          <p class="mt-1 text-xs text-red-500">{{ phoneError() }}</p>
-        }
       </div>
+      @if (phoneError()) {
+        <p class="-mt-1 text-xs text-red-500">{{ phoneError() }}</p>
+      }
 
       <button
         type="submit"
@@ -95,31 +94,18 @@
           <span class="material-symbols-rounded text-lg">arrow_forward</span>
         }
       </button>
-
-      <div class="flex items-center justify-center gap-2 pt-1">
-        <div class="flex -space-x-2">
-          <div class="h-6 w-6 rounded-full bg-primary-container ring-2 ring-white"></div>
-          <div class="h-6 w-6 rounded-full bg-secondary/30 ring-2 ring-white"></div>
-          <div class="h-6 w-6 rounded-full bg-primary/20 ring-2 ring-white"></div>
-        </div>
-        <p class="text-xs text-gray-400">Joined by 10k+ students this month</p>
-      </div>
-
-      <button
-        type="button"
-        class="w-full py-2 text-center text-sm text-gray-400 transition-colors hover:text-gray-600"
-        (click)="close()"
-      >
-        Maybe later, I'll explore first
-      </button>
     </form>
 
-    <div class="flex items-center justify-between border-t border-outline-variant bg-primary-container/30 px-8 py-3">
-      <div class="flex items-center gap-1.5 text-xs text-gray-500">
-        <span class="material-symbols-rounded text-base text-primary">verified_user</span>
-        Secure &amp; Private
-      </div>
-      <p class="text-xs text-gray-400">Partnered with top institutions</p>
+    <div class="lead-dialog__trust">
+      <span class="flex items-center gap-1">
+        <span class="material-symbols-rounded text-sm text-gray-400">verified_user</span>
+        SECURE &amp; PRIVATE
+      </span>
+      <span class="lead-dialog__trust-sep" aria-hidden="true">|</span>
+      <span class="flex items-center gap-1">
+        <span class="material-symbols-rounded text-sm text-gray-400">lock</span>
+        SSL ENCRYPTED
+      </span>
     </div>
   }
 </div>

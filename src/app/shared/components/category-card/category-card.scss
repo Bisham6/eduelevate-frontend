@@ -1,0 +1,31 @@
+.category-card--compact {
+  display: flex;
+  width: 4.75rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+
+  @media (min-width: 1024px) {
+    width: auto;
+    flex-direction: column;
+    align-items: center;
+    border-radius: var(--radius-card);
+    background: #fff;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+  }
+}
+
+.category-card__icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: var(--radius-btn);
+
+  @media (min-width: 1024px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 0.75rem;
+  }
+}

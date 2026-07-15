@@ -1,5 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, input } from '@angular/core';
 import { Category } from '../../models';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -12,4 +11,5 @@ import { RouterLink } from '@angular/router';
 })
 export class CategoryCard {
   readonly category = input.required<Category>();
+  readonly compact = input(false);
 }

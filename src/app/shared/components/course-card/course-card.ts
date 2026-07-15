@@ -12,6 +12,7 @@ import { StatusChip, StatusChipVariant } from '../status-chip/status-chip';
 export class CourseCard {
   readonly course = input.required<Course>();
   readonly index = input(0);
+  readonly compact = input(false);
 
   readonly compare = output<Course>();
 

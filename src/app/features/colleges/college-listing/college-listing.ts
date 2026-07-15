@@ -1,45 +1,50 @@
-import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, effect } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CollegeService } from '../../../shared/services/college.service';
 import { CollegeFilterStore } from '../../../shared/stores/college-filter.store';
 import { CompareStore } from '../../../shared/stores/compare.store';
-import { College, CollegeFilters, CollegeSortOption } from '../../../shared/models';
+import { College, CollegeFilters } from '../../../shared/models';
 import {
   Breadcrumb,
   SectionHeader,
   FilterSidebar,
   AcademicCard,
-  Pagination,
   Skeleton,
   EmptyState,
 } from '../../../shared/components';
+import { InfiniteScrollDirective } from '../../../shared/directives';
 import {
   buildCollegeFilterSections,
   CATEGORY_LABELS,
   getCategoryPageTitle,
 } from '../../../shared/config/college-filter.config';
 import { SeoService } from '../../../core/services/seo.service';
+import { MobileFilterDrawerService } from '../../../core/services/mobile-filter-drawer.service';
 
 @Component({
   selector: 'app-college-listing',
-  imports: [Breadcrumb, SectionHeader, FilterSidebar, AcademicCard, Pagination, Skeleton, EmptyState],
+  imports: [Breadcrumb, SectionHeader, FilterSidebar, AcademicCard, Skeleton, EmptyState, InfiniteScrollDirective],
   templateUrl: './college-listing.html',
   styleUrl: './college-listing.scss',
 })
-export class CollegeListing implements OnInit {
+export class CollegeListing implements OnInit, OnDestroy {
   private readonly collegeService = inject(CollegeService);
   private readonly filterStore = inject(CollegeFilterStore);
   private readonly compareStore = inject(CompareStore);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly seo = inject(SeoService);
+  private readonly mobileFilterDrawer = inject(MobileFilterDrawerService);
 
   protected readonly colleges = signal<College[]>([]);
   protected readonly total = signal(0);
   protected readonly loading = signal(true);
+  protected readonly loadingMore = signal(false);
   protected readonly error = signal<string | null>(null);
 
   protected readonly filters = this.filterStore.filters;
+
+  protected readonly hasMore = computed(() => this.colleges().length < this.total());
 
   protected readonly filterSections = computed(() =>
     buildCollegeFilterSections(this.filters().category),
@@ -75,15 +80,6 @@ export class CollegeListing implements OnInit {
     return items;
   });
 
-  protected readonly sortOptions: { label: string; value: CollegeSortOption }[] = [
-    { label: 'Relevance', value: 'relevance' },
-    { label: 'NIRF Rank (Low to High)', value: 'nirf_asc' },
-    { label: 'NIRF Rank (High to Low)', value: 'nirf_desc' },
-    { label: 'Fees (Low to High)', value: 'fees_asc' },
-    { label: 'Fees (High to Low)', value: 'fees_desc' },
-    { label: 'Rating', value: 'rating_desc' },
-  ];
-
   constructor() {
     effect(() => {
       const category = this.filters().category;
@@ -98,6 +94,16 @@ export class CollegeListing implements OnInit {
   }
 
   ngOnInit(): void {
+    this.mobileFilterDrawer.register({
+      kind: 'standard',
+      title: 'Filters',
+      sections: () => this.filterSections(),
+      selectedValues: () => this.selectedFilters(),
+      onValueChange: (event) => this.onFilterChange(event),
+      onClearAll: () => this.onClearFilters(),
+      onApply: () => this.onApplyFilters(),
+    });
+
     this.route.queryParams.subscribe((params) => {
       const updates: Partial<CollegeFilters> = {};
       if (params['search']) updates.search = params['search'];
@@ -108,19 +114,33 @@ export class CollegeListing implements OnInit {
     });
   }
 
-  protected loadColleges(): void {
-    this.loading.set(true);
+  ngOnDestroy(): void {
+    this.mobileFilterDrawer.unregister();
+  }
+
+  protected loadColleges(append = false): void {
+    if (append) {
+      this.loadingMore.set(true);
+    } else {
+      this.loading.set(true);
+    }
     this.error.set(null);
 
     this.collegeService.getColleges(this.filters()).subscribe({
       next: (res) => {
-        this.colleges.set(res.data);
+        if (append) {
+          this.colleges.update((current) => [...current, ...res.data]);
+        } else {
+          this.colleges.set(res.data);
+        }
         this.total.set(res.meta.total);
         this.loading.set(false);
+        this.loadingMore.set(false);
       },
       error: (err) => {
         this.error.set(err.friendlyMessage || 'Failed to load colleges. Make sure the backend is running.');
         this.loading.set(false);
+        this.loadingMore.set(false);
       },
     });
   }
@@ -169,19 +189,15 @@ export class CollegeListing implements OnInit {
   }
 
   protected onApplyFilters(): void {
+    this.filterStore.setPage(1);
     this.loadColleges();
   }
 
-  protected onSortChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as CollegeSortOption;
-    this.filterStore.setSort(value);
-    this.loadColleges();
-  }
-
-  protected onPageChange(page: number): void {
-    this.filterStore.setPage(page);
-    this.loadColleges();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  protected onLoadMore(): void {
+    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+    const nextPage = (this.filters().page ?? 1) + 1;
+    this.filterStore.setPage(nextPage);
+    this.loadColleges(true);
   }
 
   protected onCompare(college: College): void {

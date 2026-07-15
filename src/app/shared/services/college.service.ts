@@ -15,7 +15,6 @@ export class CollegeService {
     if (filters.search) params = params.set('search', filters.search);
     if (filters.category) params = params.set('category', filters.category);
     if (filters.feesRange) params = params.set('feesRange', filters.feesRange);
-    if (filters.sort) params = params.set('sort', filters.sort);
     if (filters.page) params = params.set('page', filters.page.toString());
     if (filters.limit) params = params.set('limit', filters.limit.toString());
 

@@ -1,0 +1,24 @@
+@if (isOpen()) {
+  <div class="mobile-search-sheet" (click)="onBackdropClick($event)" role="presentation">
+    <div class="mobile-search-sheet__panel" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="mobile-search-sheet__header">
+        <p class="mobile-search-sheet__title">Search</p>
+        <button type="button" class="mobile-search-sheet__close" (click)="close()" aria-label="Close search">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+      <form (submit)="onSearch($event)">
+        <app-search-autocomplete
+          [mode]="searchMode"
+          [(query)]="searchQuery"
+          name="mobileSearch"
+          [placeholder]="searchPlaceholder"
+          [ariaLabel]="searchPlaceholder"
+          inputClass="h-12 w-full rounded-full border border-outline-variant bg-white pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          (submitted)="onSearchSubmit($event)"
+        />
+        <button type="submit" class="btn-primary mt-4 w-full">Search</button>
+      </form>
+    </div>
+  </div>
+}

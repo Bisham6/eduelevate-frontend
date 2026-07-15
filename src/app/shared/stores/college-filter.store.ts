@@ -1,12 +1,11 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { CollegeFilters, CollegeSortOption } from '../models';
+import { CollegeFilters } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class CollegeFilterStore {
   readonly filters = signal<CollegeFilters>({
     page: 1,
     limit: 6,
-    sort: 'relevance',
   });
 
   readonly activeFilterCount = computed(() => {
@@ -24,15 +23,11 @@ export class CollegeFilterStore {
     this.filters.update((current) => ({ ...current, ...partial, page: partial.page ?? 1 }));
   }
 
-  setSort(sort: CollegeSortOption): void {
-    this.update({ sort, page: 1 });
-  }
-
   setPage(page: number): void {
     this.update({ page });
   }
 
   clearAll(): void {
-    this.filters.set({ page: 1, limit: 6, sort: 'relevance' });
+    this.filters.set({ page: 1, limit: 6 });
   }
 }

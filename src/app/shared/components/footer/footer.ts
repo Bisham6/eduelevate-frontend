@@ -17,6 +17,12 @@ export class Footer {
   protected readonly brandLogoSrc = BRAND_LOGO_SRC;
   protected readonly currentYear = new Date().getFullYear();
 
+  protected readonly compactLinks = [
+    { label: 'Privacy', path: '/privacy' },
+    { label: 'Terms', path: '/terms' },
+    { label: 'Support', path: '/help' },
+  ];
+
   protected readonly linkGroups: FooterLinkGroup[] = [
     {
       title: 'Platform',

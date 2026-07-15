@@ -49,18 +49,9 @@ export interface CollegeFilters {
   nirfRanking?: string[];
   specialization?: string[];
   category?: string;
-  sort?: CollegeSortOption;
   page?: number;
   limit?: number;
 }
-
-export type CollegeSortOption =
-  | 'relevance'
-  | 'nirf_asc'
-  | 'nirf_desc'
-  | 'fees_asc'
-  | 'fees_desc'
-  | 'rating_desc';
 
 export interface FilterOption {
   label: string;

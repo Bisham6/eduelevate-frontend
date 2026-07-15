@@ -1,7 +1,20 @@
 <footer class="border-t border-outline-variant bg-primary-container/40">
-  <div class="container-app section-padding !pb-8 !pt-12">
+  <!-- Mobile compact footer -->
+  <div class="container-app py-8 text-center lg:hidden">
+    <a routerLink="/" class="inline-flex justify-center">
+      <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo brand-logo--footer" />
+    </a>
+    <nav class="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-semibold text-gray-700" aria-label="Footer links">
+      @for (link of compactLinks; track link.path) {
+        <a [routerLink]="link.path" class="hover:text-primary">{{ link.label }}</a>
+      }
+    </nav>
+    <p class="mt-4 text-xs text-gray-500">&copy; {{ currentYear }} CollegeChuniye. All rights reserved.</p>
+  </div>
+
+  <!-- Desktop footer -->
+  <div class="container-app section-padding !pb-8 !pt-12 hidden lg:block">
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-      <!-- Brand -->
       <div class="space-y-4">
         <a routerLink="/" class="inline-flex">
           <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo brand-logo--footer" />
@@ -24,17 +37,13 @@
         </div>
       </div>
 
-      <!-- Link columns -->
       @for (group of linkGroups; track group.title) {
         <div>
           <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-primary">{{ group.title }}</h3>
           <ul class="space-y-2" role="list">
             @for (link of group.links; track link.path) {
               <li>
-                <a
-                  [routerLink]="link.path"
-                  class="text-sm text-gray-600 transition-colors hover:text-primary"
-                >
+                <a [routerLink]="link.path" class="text-sm text-gray-600 transition-colors hover:text-primary">
                   {{ link.label }}
                 </a>
               </li>
@@ -46,7 +55,7 @@
 
     <div class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-outline-variant pt-6 text-sm text-gray-500 sm:flex-row">
       <p>&copy; {{ currentYear }} CollegeChuniye. All rights reserved.</p>
-      <div class="flex items-center gap-4">
+      <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:justify-end">
         <span class="flex items-center gap-1">
           <span class="material-symbols-rounded text-base text-primary">verified</span>
           AI Verified Content
