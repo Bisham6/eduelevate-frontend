@@ -8,9 +8,8 @@
   >
     <div class="flex h-16 items-center justify-between border-b border-outline-variant px-4">
       @if (!sidebarCollapsed()) {
-        <a routerLink="/" class="flex items-center gap-2">
-          <span class="material-symbols-rounded text-2xl text-secondary">school</span>
-          <span class="font-bold text-primary">CollegeChuniye</span>
+        <a routerLink="/" class="min-w-0 flex-1">
+          <img [src]="brandLogoSrc" alt="CollegeChuniye" class="brand-logo max-w-full" />
         </a>
       }
       <button

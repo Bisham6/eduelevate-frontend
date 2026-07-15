@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.academic-card__title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

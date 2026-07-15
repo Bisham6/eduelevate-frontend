@@ -2,11 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SeoService } from './core/services/seo.service';
+import { GlobalLoader } from './shared/components/global-loader/global-loader';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  template: '<router-outlet />',
+  imports: [RouterOutlet, GlobalLoader],
+  template: `
+    <app-global-loader />
+    <router-outlet />
+  `,
   styles: ':host { display: block; min-height: 100vh; }',
 })
 export class App implements OnInit {

@@ -1,10 +1,13 @@
 import { Component, signal, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { BRAND_LOGO_SRC } from '../../constants/brand';
 
 interface NavLink {
   label: string;
   path: string;
+  comingSoon?: boolean;
 }
 
 @Component({
@@ -15,7 +18,9 @@ interface NavLink {
 })
 export class TopNavBar {
   private readonly router = inject(Router);
+  private readonly toastr = inject(ToastrService);
 
+  protected readonly brandLogoSrc = BRAND_LOGO_SRC;
   protected readonly mobileMenuOpen = signal(false);
   protected searchQuery = '';
 
@@ -23,7 +28,7 @@ export class TopNavBar {
     { label: 'Colleges', path: '/colleges' },
     { label: 'Courses', path: '/courses' },
     { label: 'Exams', path: '/exams' },
-    { label: 'Study Abroad', path: '/study-abroad' },
+    { label: 'Study Abroad', path: '/study-abroad', comingSoon: true },
   ];
 
   protected get searchPlaceholder(): string {
@@ -36,6 +41,11 @@ export class TopNavBar {
 
   protected closeMobileMenu(): void {
     this.mobileMenuOpen.set(false);
+  }
+
+  protected onComingSoonNav(): void {
+    this.toastr.info('Coming soon...');
+    this.closeMobileMenu();
   }
 
   protected onSearch(event: Event): void {

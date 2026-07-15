@@ -3,6 +3,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AdminAuthStore } from '../../../core/admin/admin-auth.store';
+import { BRAND_LOGO_SRC } from '../../../shared/constants/brand';
 
 @Component({
   selector: 'app-admin-login',
@@ -16,6 +17,7 @@ export class AdminLogin {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
+  protected readonly brandLogoSrc = BRAND_LOGO_SRC;
   protected identifier = signal('bisham65');
   protected password = signal('');
   protected rememberMe = signal(false);

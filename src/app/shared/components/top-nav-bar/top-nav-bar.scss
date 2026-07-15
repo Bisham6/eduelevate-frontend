@@ -5,6 +5,13 @@
   z-index: 50;
 }
 
+.brand-logo-link {
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-btn);
+  background: #fff;
+  line-height: 0;
+}
+
 .nav-link-active {
   color: var(--color-primary);
   position: relative;

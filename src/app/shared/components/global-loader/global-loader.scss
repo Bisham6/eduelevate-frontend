@@ -1,0 +1,61 @@
+.global-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  pointer-events: none;
+}
+
+.global-loader__spinner {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+}
+
+.global-loader__ring {
+  width: 100%;
+  height: 100%;
+  animation: global-loader-spin 1s linear infinite;
+}
+
+.global-loader__track,
+.global-loader__arc {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.global-loader__track {
+  stroke: rgba(163, 42, 135, 0.15);
+}
+
+.global-loader__arc {
+  stroke: var(--color-primary);
+  stroke-dasharray: 44 132;
+  stroke-dashoffset: 0;
+}
+
+.global-loader__icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+@keyframes global-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-loader__ring {
+    animation: none;
+  }
+}

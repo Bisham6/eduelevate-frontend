@@ -5,7 +5,7 @@
   justify-content: center;
   padding: 1.5rem;
   background:
-    linear-gradient(rgba(26, 35, 126, 0.35), rgba(26, 35, 126, 0.45)),
+    linear-gradient(rgba(163, 42, 135, 0.35), rgba(163, 42, 135, 0.45)),
     url('../../../../assets/images/admin-login-bg.jpg')
       center / cover no-repeat;
 }
@@ -138,7 +138,7 @@
 
   &:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.12);
+    box-shadow: 0 0 0 3px rgba(163, 42, 135, 0.12);
   }
 
   &--password {

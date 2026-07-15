@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { BRAND_LOGO_SRC } from '../../shared/constants/brand';
 
 interface DashboardNavItem {
   label: string;
@@ -14,6 +15,7 @@ interface DashboardNavItem {
   styleUrl: './dashboard-layout.scss',
 })
 export class DashboardLayout {
+  protected readonly brandLogoSrc = BRAND_LOGO_SRC;
   protected readonly sidebarCollapsed = signal(false);
 
   protected readonly navItems: DashboardNavItem[] = [
