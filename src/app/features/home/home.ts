@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CategoryService, CollegeService, ExamService } from '../../shared/services';
@@ -27,12 +27,23 @@ import { CompareStore } from '../../shared/stores/compare.store';
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
   private readonly categoryService = inject(CategoryService);
   private readonly collegeService = inject(CollegeService);
   private readonly examService = inject(ExamService);
   private readonly compareStore = inject(CompareStore);
   private readonly router = inject(Router);
+
+  private typewriterTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private static readonly TYPE_DELAY_MS = 60;
+  private static readonly PAUSE_MS = 2000;
+  private static readonly ERASE_DELAY_MS = 40;
+
+  protected readonly heroLine1Text = 'Find Your Perfect';
+  protected readonly heroLine2Text = 'Academic Future';
+  protected readonly heroLine1 = signal('');
+  protected readonly heroLine2 = signal('');
 
   protected readonly categories = signal<Category[]>([]);
   protected readonly featuredColleges = signal<College[]>([]);
@@ -97,6 +108,8 @@ export class Home implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.startTypewriter();
+
     this.categoryService.getAll().subscribe({
       next: (data) => {
         this.categories.set(data);
@@ -120,6 +133,85 @@ export class Home implements OnInit {
       },
       error: () => this.loadingExams.set(false),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.clearTypewriterTimer();
+  }
+
+  private startTypewriter(): void {
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.heroLine1.set(this.heroLine1Text);
+      this.heroLine2.set(this.heroLine2Text);
+      return;
+    }
+
+    this.heroLine1.set('');
+    this.heroLine2.set('');
+    this.scheduleTypewriter('typing1', Home.TYPE_DELAY_MS);
+  }
+
+  private scheduleTypewriter(
+    phase: 'typing1' | 'typing2' | 'pause' | 'erasing2' | 'erasing1',
+    delayMs: number,
+  ): void {
+    this.clearTypewriterTimer();
+    this.typewriterTimer = setTimeout(() => this.runTypewriterPhase(phase), delayMs);
+  }
+
+  private runTypewriterPhase(phase: 'typing1' | 'typing2' | 'pause' | 'erasing2' | 'erasing1'): void {
+    switch (phase) {
+      case 'typing1': {
+        const current = this.heroLine1();
+        if (current.length < this.heroLine1Text.length) {
+          this.heroLine1.set(this.heroLine1Text.slice(0, current.length + 1));
+          this.scheduleTypewriter('typing1', Home.TYPE_DELAY_MS);
+        } else {
+          this.scheduleTypewriter('typing2', Home.TYPE_DELAY_MS);
+        }
+        break;
+      }
+      case 'typing2': {
+        const current = this.heroLine2();
+        if (current.length < this.heroLine2Text.length) {
+          this.heroLine2.set(this.heroLine2Text.slice(0, current.length + 1));
+          this.scheduleTypewriter('typing2', Home.TYPE_DELAY_MS);
+        } else {
+          this.scheduleTypewriter('pause', Home.PAUSE_MS);
+        }
+        break;
+      }
+      case 'pause':
+        this.scheduleTypewriter('erasing2', Home.ERASE_DELAY_MS);
+        break;
+      case 'erasing2': {
+        const current = this.heroLine2();
+        if (current.length > 0) {
+          this.heroLine2.set(current.slice(0, -1));
+          this.scheduleTypewriter('erasing2', Home.ERASE_DELAY_MS);
+        } else {
+          this.scheduleTypewriter('erasing1', Home.ERASE_DELAY_MS);
+        }
+        break;
+      }
+      case 'erasing1': {
+        const current = this.heroLine1();
+        if (current.length > 0) {
+          this.heroLine1.set(current.slice(0, -1));
+          this.scheduleTypewriter('erasing1', Home.ERASE_DELAY_MS);
+        } else {
+          this.scheduleTypewriter('typing1', Home.TYPE_DELAY_MS);
+        }
+        break;
+      }
+    }
+  }
+
+  private clearTypewriterTimer(): void {
+    if (this.typewriterTimer !== null) {
+      clearTimeout(this.typewriterTimer);
+      this.typewriterTimer = null;
+    }
   }
 
   protected onHeroSearch(): void {
